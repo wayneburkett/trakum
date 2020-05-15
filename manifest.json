@@ -1,0 +1,37 @@
+{
+  "name": "Trakum",
+  "version": "0.0.1",
+  "manifest_version": 2,
+  "description": "Track changes to websites",
+  "homepage_url": "http://github.com/wayneburkett/trakum",
+  "icons": {
+  },
+  "default_locale": "en",
+  "background": {
+    "scripts": [
+      "src/bg/background.js"
+    ],
+    "persistent": true
+  },
+  "options_page": "src/options/index.html",
+  "browser_action": {
+    "default_title": "browser action demo",
+    "default_popup": "src/browser_action/browser_action.html"
+  },
+  "permissions": [
+    "<all_urls>", "storage"
+  ],
+  "content_scripts": [
+    {
+      "matches": [
+        "https://news.ycombinator.com/item?id=*"
+      ],
+      "css": [
+        "src/inject/inject.css"
+      ],
+      "js": [
+        "markasread.user.js"
+      ]
+    }
+  ]
+}

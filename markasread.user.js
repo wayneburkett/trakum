@@ -1,15 +1,3 @@
-// MarkAsRead
-// v0.1
-// Copyright (c) 2008, Wayne Burkett
-// Released under the GPL license
-// http://www.gnu.org/copyleft/gpl.html
-
-// ==UserScript==
-// @name          MarkAsRead
-// @namespace     http://dionidium.com/projects/greasemonkey/
-// @description   Mark previously-read Hacker News comments
-// @include       http://news.ycombinator.com/item?id=*
-// ==/UserScript==
 
 // change this if you hate the hideous green border
 function markElement(el) {
@@ -75,7 +63,7 @@ function getID(comment) {
 }
 
 function getComments(cache) {
-    var comments = document.evaluate("//span[@class='comment']", document, null,
+    var comments = document.evaluate("//div[@class='comment']", document, null,
         XPathResult.ORDERED_NODE_SNAPSHOT_TYPE,null);
     var res = [];
     for (var i = 0; i < comments.snapshotLength; i++) {
@@ -95,25 +83,45 @@ function getCurrQueryStr() {
 }
 
 function saveMarked(comments) {
-    GM_setValue(getCurrQueryStr(), comments.filter(function(el) { return el[0].seen })
+    setValue(getCurrQueryStr(), comments
+        .filter(function(el) { return el[0].seen })
         .map(function(el) { return el[2] }).toString());
 }
 
-function getPreviouslyMarked() {
-    var seen = {};
-    var ids = GM_getValue(getCurrQueryStr(), '').split(',');
-    for (var i = 0; i < ids.length; i++)
-        seen[ids[i]] = true;
-    return seen;
+function getPreviouslyMarked(callback) {
+    getValue(getCurrQueryStr(), function(items) {
+        var seen = {};
+        var ids = (items || '').split(',');
+        for (var i = 0; i < ids.length; i++) {
+            seen[ids[i]] = true;
+        }
+        callback(seen);
+    });
 }
 
+function getValue(key, callback, _this) {
+    chrome.storage.local.get([key], function(items) {
+        if (callback) {
+            callback.call(_this || this, items && items[key]);
+        }
+    });
+};
+
+function setValue(key, val, callback) {
+    var obj = {};
+    obj[key] = val;
+    chrome.storage.local.set(obj, callback);
+};
+
 window.addEventListener('load', function() {
-    var cache = getPreviouslyMarked();
-    var comments = getComments(cache);
-    document.addEventListener('scroll', createOnPause(1500, function() {
-        markCurrent(comments);
-        saveMarked(comments);
-    }), false);
+    getPreviouslyMarked(function(cache) {
+        var comments = getComments(cache);
+        document.addEventListener('scroll', createOnPause(1500, function() {
+            markCurrent(comments);
+            saveMarked(comments);
+        }), false);
+    });
 }, false);
 
+// 2020-05-14 - 0.2 - convert to a chrome extension
 // 2008-12-12 - 0.1 - released
