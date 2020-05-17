@@ -9,7 +9,7 @@
   "default_locale": "en",
   "background": {
     "scripts": [
-      "src/bg/background.js"
+      "src/background/background.js"
     ],
     "persistent": true
   },
@@ -27,10 +27,10 @@
         "https://news.ycombinator.com/item?id=*"
       ],
       "css": [
-        "src/inject/inject.css"
+        "src/content_scripts/inject.css"
       ],
       "js": [
-        "markasread.user.js"
+        "src/content_scripts/markasread.user.js"
       ]
     }
   ]
