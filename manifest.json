@@ -23,13 +23,12 @@
   ],
   "content_scripts": [
     {
-      "matches": [
-        "https://news.ycombinator.com/item?id=*"
-      ],
+      "matches": ["<all_urls>"],
       "css": [
         "src/content_scripts/inject.css"
       ],
       "js": [
+        "src/util/MatchPattern.js",
         "src/content_scripts/markasread.user.js"
       ]
     }

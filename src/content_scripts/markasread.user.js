@@ -62,9 +62,9 @@ function getID(comment) {
     return link.id.split('_')[1];
 }
 
-function getComments(cache) {
-    var comments = document.evaluate("//div[@class='comment']", document, null,
-        XPathResult.ORDERED_NODE_SNAPSHOT_TYPE,null);
+function getComments(query, cache) {
+    var comments = document.evaluate(query, document, null,
+        XPathResult.ORDERED_NODE_SNAPSHOT_TYPE, null);
     var res = [];
     for (var i = 0; i < comments.snapshotLength; i++) {
         var element = comments.snapshotItem(i);
@@ -113,14 +113,27 @@ function setValue(key, val, callback) {
     chrome.storage.local.set(obj, callback);
 };
 
+const MATCH_PATTERNS = [
+    {
+        pattern: "https://news.ycombinator.com/item?id=*",
+        query: "//div[@class='comment']",
+    }
+]
+
+function getMatches(url) {
+    return MATCH_PATTERNS.filter(item => MatchPattern(item.pattern)(url))
+}
+
 window.addEventListener('load', function() {
-    getPreviouslyMarked(function(cache) {
-        var comments = getComments(cache);
-        document.addEventListener('scroll', createOnPause(1500, function() {
-            markCurrent(comments);
-            saveMarked(comments);
-        }), false);
-    });
+    getMatches(window.location).forEach((page) => {
+        getPreviouslyMarked(function(cache) {
+            var comments = getComments(page.query, cache);
+            document.addEventListener('scroll', createOnPause(1500, function() {
+                markCurrent(comments);
+                saveMarked(comments);
+            }), false);
+        });
+    })
 }, false);
 
 // 2020-05-14 - 0.2 - convert to a chrome extension
