@@ -1,5 +1,6 @@
 
 function markElement(el) {
+    el.classList.remove('trakum_new')
     el.classList.add('trakum_seen')
 }
 
@@ -71,6 +72,8 @@ function getComments(query, cache) {
         if (cache[id]) {
             element.seen = true;
             markElement(element);
+        } else {
+            element.classList.add('trakum_new');
         }
         element.classList.add('trakum_element')
         res.push([element, getY(element), id])
