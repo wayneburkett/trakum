@@ -1,7 +1,6 @@
 
-// change this if you hate the hideous green border
 function markElement(el) {
-    el.style.border = "1px solid green";
+    el.classList.add('trakum_seen')
 }
 
 function getViewportHeight() {
@@ -73,6 +72,7 @@ function getComments(query, cache) {
             element.seen = true;
             markElement(element);
         }
+        element.classList.add('trakum_element')
         res.push([element, getY(element), id])
     }
     return res;
