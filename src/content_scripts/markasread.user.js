@@ -84,8 +84,9 @@ function getCurrQueryStr() {
 
 function saveMarked(comments) {
     setValue(getCurrQueryStr(), comments
-        .filter(function(el) { return el[0].seen })
-        .map(function(el) { return el[2] }).toString());
+        .filter(([element]) => element.seen)
+        .map(([,,id]) => id)
+        .toString())
 }
 
 function getPreviouslyMarked(callback) {
