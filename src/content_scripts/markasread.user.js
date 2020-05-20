@@ -90,15 +90,16 @@ function getComments(query, cache) {
     return res;
 }
 
-function getCurrQueryStr() {
-    return document.location.href.split('?')[1];
+function pageKey() {
+    if (!pageKey._value) pageKey._value = document.location.href;
+    return pageKey._value;
 }
 
 function saveMarked(page, comments) {
     if (page.dry) {
         return;
     }
-    setValue(getCurrQueryStr(), comments
+    setValue(pageKey(), comments
         .filter(([element]) => element.seen)
         .map(([,,id]) => id)
         .toString())
@@ -108,7 +109,7 @@ function getPreviouslyMarked(page, callback) {
     if (page.dry) {
         return callback({});
     }
-    getValue(getCurrQueryStr(), function(items) {
+    getValue(pageKey(), function(items) {
         var seen = {};
         var ids = (items || '').split(',');
         for (var i = 0; i < ids.length; i++) {
@@ -139,8 +140,8 @@ const MATCH_PATTERNS = [
     },
     {
         pattern: "https://www.doctorofcredit.com/best-bank-account-bonuses/",
-        query: "//ul[@class='toc_list']/li/ul/li/a/text()",
-        dry: true
+        query: "//ul[@class='toc_list']/li/ul/li",
+        dry: false
     }
 ]
 
