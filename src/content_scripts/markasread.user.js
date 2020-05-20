@@ -55,8 +55,16 @@ function markCurrent(comments) {
     }
 }
 
-function getID(comment) {
-    return md5(comment.textContent);
+function processElementNode(element, cache) {
+    var id = md5(element.textContent);
+    if (cache[id]) {
+        element.seen = true;
+        markElement(element);
+    } else {
+        element.classList.add('trakum_new');
+    }
+    element.classList.add('trakum_element')
+    return [element, getY(element), id];
 }
 
 function getComments(query, cache) {
@@ -64,16 +72,20 @@ function getComments(query, cache) {
         XPathResult.ORDERED_NODE_SNAPSHOT_TYPE, null);
     var res = [];
     for (var i = 0; i < comments.snapshotLength; i++) {
-        var element = comments.snapshotItem(i);
-        var id = getID(element);
-        if (cache[id]) {
-            element.seen = true;
-            markElement(element);
-        } else {
-            element.classList.add('trakum_new');
+        var processedNode = null;
+        var node = comments.snapshotItem(i);
+        switch (node.nodeType) {
+            case Node.ELEMENT_NODE:
+                processedNode = processElementNode(node, cache);
+                break;
+            default:
+                // we can and probably should process other node types, but
+                // it's only elements for now
+                break;
         }
-        element.classList.add('trakum_element')
-        res.push([element, getY(element), id])
+        if (processedNode) {
+            res.push(processedNode);
+        }
     }
     return res;
 }
@@ -82,14 +94,20 @@ function getCurrQueryStr() {
     return document.location.href.split('?')[1];
 }
 
-function saveMarked(comments) {
+function saveMarked(page, comments) {
+    if (page.dry) {
+        return;
+    }
     setValue(getCurrQueryStr(), comments
         .filter(([element]) => element.seen)
         .map(([,,id]) => id)
         .toString())
 }
 
-function getPreviouslyMarked(callback) {
+function getPreviouslyMarked(page, callback) {
+    if (page.dry) {
+        return callback({});
+    }
     getValue(getCurrQueryStr(), function(items) {
         var seen = {};
         var ids = (items || '').split(',');
@@ -118,6 +136,11 @@ const MATCH_PATTERNS = [
     {
         pattern: "https://news.ycombinator.com/item?id=*",
         query: "//div[@class='comment']",
+    },
+    {
+        pattern: "https://www.doctorofcredit.com/best-bank-account-bonuses/",
+        query: "//ul[@class='toc_list']/li/ul/li/a/text()",
+        dry: true
     }
 ]
 
@@ -127,11 +150,11 @@ function getMatches(url) {
 
 window.addEventListener('load', function() {
     getMatches(window.location).forEach((page) => {
-        getPreviouslyMarked(function(cache) {
+        getPreviouslyMarked(page, function(cache) {
             var comments = getComments(page.query, cache);
             document.addEventListener('scroll', createOnPause(1500, function() {
                 markCurrent(comments);
-                saveMarked(comments);
+                saveMarked(page, comments);
             }), false);
         });
     })
