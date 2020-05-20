@@ -55,11 +55,8 @@ function markCurrent(comments) {
     }
 }
 
-// brittle hn-specific stuff
 function getID(comment) {
-    var root = comment.parentNode.parentNode;
-    var link = root.getElementsByTagName('a')[0];
-    return link.id.split('_')[1];
+    return md5(comment.textContent);
 }
 
 function getComments(query, cache) {

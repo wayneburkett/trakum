@@ -28,6 +28,7 @@
         "src/content_scripts/inject.css"
       ],
       "js": [
+        "src/lib/md5.min.js",
         "src/util/MatchPattern.js",
         "src/content_scripts/markasread.user.js"
       ]
