@@ -149,13 +149,26 @@ function getMatches(url) {
     return MATCH_PATTERNS.filter(item => MatchPattern(item.pattern)(url))
 }
 
+function updateCount(comments) {
+    const newIds = comments
+        .filter(([el]) => !el.seen)
+        .map(([,,id]) => id);
+    const messenger = new MessageRouter();
+    messenger.sendMessage({
+        action: 'UPDATE_COUNT',
+        payload: newIds
+    });
+}
+
 window.addEventListener('load', function() {
     getMatches(window.location).forEach((page) => {
         getPreviouslyMarked(page, function(cache) {
-            var comments = getComments(page.query, cache);
+            const comments = getComments(page.query, cache);
+            updateCount(comments);
             document.addEventListener('scroll', createOnPause(1500, function() {
                 markCurrent(comments);
                 saveMarked(page, comments);
+                updateCount(comments);
             }), false);
         });
     })

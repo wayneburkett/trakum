@@ -9,6 +9,7 @@
   "default_locale": "en",
   "background": {
     "scripts": [
+      "src/util/MessageRouter.js",
       "src/background/background.js"
     ],
     "persistent": true
@@ -29,6 +30,7 @@
       ],
       "js": [
         "src/lib/md5.min.js",
+        "src/util/MessageRouter.js",
         "src/util/MatchPattern.js",
         "src/content_scripts/markasread.user.js"
       ]
