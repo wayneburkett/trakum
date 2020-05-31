@@ -133,45 +133,39 @@ function setValue(key, val, callback) {
     chrome.storage.local.set(obj, callback);
 };
 
-const MATCH_PATTERNS = [
-    {
-        pattern: "https://news.ycombinator.com/item?id=*",
-        query: "//div[@class='comment']",
-    },
-    {
-        pattern: "https://www.doctorofcredit.com/best-bank-account-bonuses/",
-        query: "//ul[@class='toc_list']/li/ul/li",
-        dry: false
-    }
-]
-
-function getMatches(url) {
-    return MATCH_PATTERNS.filter(item => MatchPattern(item.pattern)(url))
+function getMatches(patterns, url) {
+    return patterns.filter(item => MatchPattern(item.pattern)(url))
 }
 
 function updateCount(comments) {
     const newIds = comments
         .filter(([el]) => !el.seen)
         .map(([,,id]) => id);
-    const messenger = new MessageRouter();
-    messenger.sendMessage({
-        action: 'UPDATE_COUNT',
-        payload: newIds
+    MessageRouter.sendMessage('UPDATE_COUNT', newIds);
+}
+
+function getMatchPatterns(callback) {
+    MessageRouter.sendMessage('GET_MATCH_PATTERNS', null, callback);
+}
+
+function handlePage(page) {
+    getPreviouslyMarked(page, function(cache) {
+        const comments = getComments(page.query, cache);
+        updateCount(comments);
+        document.addEventListener('scroll', createOnPause(1500, function() {
+            markCurrent(comments);
+            saveMarked(page, comments);
+            updateCount(comments);
+        }), false);
     });
 }
 
 window.addEventListener('load', function() {
-    getMatches(window.location).forEach((page) => {
-        getPreviouslyMarked(page, function(cache) {
-            const comments = getComments(page.query, cache);
-            updateCount(comments);
-            document.addEventListener('scroll', createOnPause(1500, function() {
-                markCurrent(comments);
-                saveMarked(page, comments);
-                updateCount(comments);
-            }), false);
-        });
-    })
+    getMatchPatterns((response) => {
+        if (!response) return;
+        getMatches(response, window.location).forEach(handlePage);
+    });
+
 }, false);
 
 // 2020-05-14 - 0.2 - convert to a chrome extension
