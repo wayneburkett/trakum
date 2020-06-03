@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useContext } from 'react';
 import { Formik } from "formik";
 import Form from "react-bootstrap/Form";
 import Col from "react-bootstrap/Col";
@@ -6,17 +6,27 @@ import Button from "react-bootstrap/Button";
 import InputGroup from "react-bootstrap/InputGroup";
 import * as Yup from "yup";
 import { MatchPattern } from '../util/MatchPattern'
+import { GlobalContext } from '../context/GlobalState'
 
 const schema = Yup.object({
-  matchPattern: Yup.string().matches(MatchPattern.MATCH_PATTERN_REGEX).required('Match pattern is required'),
+  pattern: Yup.string().matches(MatchPattern.MATCH_PATTERN_REGEX).required('Match pattern is required'),
   selector: Yup.string().required("Selector is required")
 });
 
 function PageSpecForm() {
+  const { addPageSpec } = useContext(GlobalContext)
+
+  const handleSubmit = async evt => {
+    const isValid = await schema.validate(evt)
+    if (!isValid) return
+    addPageSpec(evt)
+  }
+
   return (
     <Formik
       validationSchema={schema}
-      initialValues={{ selector: '', matchPattern: '' }}
+      onSubmit={handleSubmit}
+      initialValues={{ selector: '', pattern: '' }}
     >
       {({
         handleSubmit,
@@ -29,14 +39,14 @@ function PageSpecForm() {
       }) => (
       <Form onSubmit={handleSubmit}>
         <Form.Row>
-          <Form.Group as={Col} md="12" controlId="matchPattern">
+          <Form.Group as={Col} md="12" controlId="pattern">
             <Form.Control
               type="text"
-              name="matchPattern"
+              name="pattern"
               placeholder="Matches"
-              value={values.matchPattern || ""}
+              value={values.pattern || ""}
               onChange={handleChange}
-              isInvalid={touched.matchPattern && errors.matchPattern}
+              isInvalid={touched.pattern && errors.pattern}
             />
           </Form.Group>
           <Form.Group as={Col} md="12" controlId="selector">
@@ -54,7 +64,7 @@ function PageSpecForm() {
                 aria-describedby="basic-addon1"
               />
             </InputGroup>
-            <Form.Control.Feedback type="invalid">{errors.matchPattern}</Form.Control.Feedback>
+            <Form.Control.Feedback type="invalid">{errors.pattern}</Form.Control.Feedback>
             <Form.Control.Feedback type="invalid">{errors.selector}</Form.Control.Feedback>
           </Form.Group>
         </Form.Row>
