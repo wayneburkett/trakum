@@ -12,7 +12,7 @@ const MATCH_PATTERNS = [
 
 chrome.runtime.onMessage.addListener((message, sender, response) => {
     const { action, payload } = message;
-    const { tabId } = sender.tab;
+    const { id: tabId } = sender.tab;
     switch (action) {
         case 'UPDATE_COUNT':
             setBadgeText(tabId, payload.length);
@@ -29,7 +29,7 @@ chrome.runtime.onMessage.addListener((message, sender, response) => {
 
 function setBadgeText(tabId, val) {
   chrome.browserAction.setBadgeText({
-    text: (val > 0 ? String(val.length) : ''),
+    text: (val > 0 ? String(val) : ''),
     tabId
   });
 }
