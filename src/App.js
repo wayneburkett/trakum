@@ -1,12 +1,12 @@
 import React from "react";
-import BrowserAction from "./BrowserAction";
+import BrowserAction from "./components/BrowserAction";
 import "./App.css";
 import Navbar from "react-bootstrap/Navbar";
 
 function App() {
   return (
     <div className="App">
-      <Navbar bg="light" expand="lg" variant="light">
+      <Navbar bg="dark" expand="lg" variant="dark">
         <Navbar.Brand href="#home">Trakum</Navbar.Brand>
       </Navbar>
       <BrowserAction />
