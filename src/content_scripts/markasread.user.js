@@ -1,3 +1,7 @@
+import { MatchPattern } from '../util/MatchPattern'
+import { MessageRouter } from '../util/MessageRouter'
+
+const md5 = require('md5')
 
 function markElement(el) {
     el.classList.remove('trakum_new')
@@ -36,10 +40,10 @@ function getY(el) {
 // or scrolling events); it will execute the callback only if the given timout
 // period has passed since the last time the same event fired
 function createOnPause(timeout, callback) {
+    let timer = null;
     return function(e) {
-        if (arguments.callee.timer)
-            clearTimeout(arguments.callee.timer);
-        arguments.callee.timer = setTimeout(callback, timeout);
+        if (timer) clearTimeout(timer);
+        timer = setTimeout(callback, timeout);
     }
 }
 

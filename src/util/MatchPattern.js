@@ -1,4 +1,4 @@
-const MatchPattern = (function() {
+export const MatchPattern = (function() {
     // ultimately, this should match as outlined here:
     // https://developer.chrome.com/extensions/match_patterns
     // this doesn't handle host names exhaustively (i.e. according to
@@ -10,7 +10,7 @@ const MatchPattern = (function() {
 
     function components (pattern) {
         const results = pattern.match(test)
-        if (!results || results.length != 4) throw 'Invalid match pattern'
+        if (!results || results.length !== 4) throw new Error('Invalid match pattern')
         return results.slice(1).map(c => convertToRegExp(c))
     }
 
