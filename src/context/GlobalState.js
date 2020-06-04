@@ -12,13 +12,21 @@ const initialState = {
       query: "//ul[@class='toc_list']/li/ul/li",
       dry: false
     }
-  ]
+  ],
+  selectedKey: 'current'
 }
 
 export const GlobalContext = createContext(initialState);
 
 export const GlobalProvider = ({ children }) => {
   const [state, dispatch] = useReducer(AppReducer, initialState);
+
+  function selectKey(key) {
+    dispatch({
+      type: 'SELECT_KEY',
+      payload: key
+    });
+  }
 
   function addPageSpec(pageSpec) {
     dispatch({
@@ -28,8 +36,10 @@ export const GlobalProvider = ({ children }) => {
   }
 
   return (<GlobalContext.Provider value={{
+    selectedKey: state.selectedKey,
     pageSpecs: state.pageSpecs,
-    addPageSpec
+    addPageSpec,
+    selectKey
   }}>
     {children}
   </GlobalContext.Provider>);
