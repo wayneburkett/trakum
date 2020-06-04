@@ -1,3 +1,5 @@
+/*global chrome*/
+
 import React, { createContext, useReducer } from 'react';
 import AppReducer from './AppReducer';
 
@@ -13,7 +15,9 @@ const initialState = {
       dry: false
     }
   ],
-  selectedKey: 'current'
+  selectedKey: 'current',
+  currentUrl: null
+
 }
 
 export const GlobalContext = createContext(initialState);
@@ -35,11 +39,22 @@ export const GlobalProvider = ({ children }) => {
     });
   }
 
+  function getCurrentUrl() {
+    chrome.tabs.query({ active: true, currentWindow: true }, function([tab]) {
+      dispatch({
+        type: 'GET_CURRENT_URL',
+        payload: new URL(tab.url)
+      });
+    });
+  }
+
   return (<GlobalContext.Provider value={{
     selectedKey: state.selectedKey,
     pageSpecs: state.pageSpecs,
+    currentUrl: state.currentUrl,
     addPageSpec,
-    selectKey
+    selectKey,
+    getCurrentUrl
   }}>
     {children}
   </GlobalContext.Provider>);

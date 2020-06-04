@@ -17,6 +17,11 @@ export default (state, action) => {
         ...state,
         pageSpecs: [action.payload, ...state.pageSpecs]
       }
+    case 'GET_CURRENT_URL':
+      return {
+        ...state,
+        currentUrl: action.payload
+      }
     default:
       return state
   }

@@ -46,7 +46,7 @@ export const MatchPattern = (function() {
 
     function matcher(pattern) {
         const [protocol, host, path] = components(pattern)
-        return (url) =>
+        return (url) => url &&
             protocol.test(url.protocol) &&
             host.test(url.hostname) &&
             path.test(url.pathname + url.search)
