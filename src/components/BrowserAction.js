@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import PageSpecForm from './PageSpecForm'
 import { PageSpecList } from './PageSpecList'
 
-function BrowserAction() {
+export function BrowserAction() {
   return (
     <div className="page">
       <PageSpecList />
@@ -10,6 +10,3 @@ function BrowserAction() {
     </div>
   );
 }
-
-export default BrowserAction;
-
