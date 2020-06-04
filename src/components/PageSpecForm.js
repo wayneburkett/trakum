@@ -1,19 +1,19 @@
-import React, { useContext } from 'react';
-import { Formik } from "formik";
-import Form from "react-bootstrap/Form";
-import Col from "react-bootstrap/Col";
-import Button from "react-bootstrap/Button";
-import InputGroup from "react-bootstrap/InputGroup";
-import * as Yup from "yup";
+import React, { useContext } from 'react'
+import { Formik } from 'formik'
+import Form from 'react-bootstrap/Form'
+import Col from 'react-bootstrap/Col'
+import Button from 'react-bootstrap/Button'
+import InputGroup from 'react-bootstrap/InputGroup'
+import * as Yup from 'yup'
 import { MatchPattern } from '../util/MatchPattern'
 import { GlobalContext } from '../context/GlobalState'
 
 const schema = Yup.object({
   pattern: Yup.string().matches(MatchPattern.MATCH_PATTERN_REGEX).required('Match pattern is required'),
-  selector: Yup.string().required("Selector is required")
-});
+  selector: Yup.string().required('Selector is required')
+})
 
-function PageSpecForm() {
+function PageSpecForm () {
   const { addPageSpec } = useContext(GlobalContext)
 
   const handleSubmit = async evt => {
@@ -37,42 +37,42 @@ function PageSpecForm() {
         isInvalid,
         errors
       }) => (
-      <Form onSubmit={handleSubmit}>
-        <Form.Row>
-          <Form.Group as={Col} md="12" controlId="pattern">
-            <Form.Control
-              type="text"
-              name="pattern"
-              placeholder="Matches"
-              value={values.pattern || ""}
-              onChange={handleChange}
-              isInvalid={touched.pattern && errors.pattern}
-            />
-          </Form.Group>
-          <Form.Group as={Col} md="12" controlId="selector">
-            <InputGroup className="mb-3">
-              <InputGroup.Prepend>
-                <InputGroup.Text id="basic-addon1">@</InputGroup.Text>
-              </InputGroup.Prepend>
+        <Form onSubmit={handleSubmit}>
+          <Form.Row>
+            <Form.Group as={Col} md='12' controlId='pattern'>
               <Form.Control
-                type="text"
-                name="selector"
-                placeholder="Selector"
-                value={values.selector || ""}
+                type='text'
+                name='pattern'
+                placeholder='Matches'
+                value={values.pattern || ''}
                 onChange={handleChange}
-                isInvalid={touched.selector && errors.selector}
-                aria-describedby="basic-addon1"
+                isInvalid={touched.pattern && errors.pattern}
               />
-            </InputGroup>
-            <Form.Control.Feedback type="invalid">{errors.pattern}</Form.Control.Feedback>
-            <Form.Control.Feedback type="invalid">{errors.selector}</Form.Control.Feedback>
-          </Form.Group>
-        </Form.Row>
-        <Button type="submit" variant="dark" style={{ marginRight: "10px" }}>Search</Button>
-      </Form>
-    )}
+            </Form.Group>
+            <Form.Group as={Col} md='12' controlId='selector'>
+              <InputGroup className='mb-3'>
+                <InputGroup.Prepend>
+                  <InputGroup.Text id='basic-addon1'>@</InputGroup.Text>
+                </InputGroup.Prepend>
+                <Form.Control
+                  type='text'
+                  name='selector'
+                  placeholder='Selector'
+                  value={values.selector || ''}
+                  onChange={handleChange}
+                  isInvalid={touched.selector && errors.selector}
+                  aria-describedby='basic-addon1'
+                />
+              </InputGroup>
+              <Form.Control.Feedback type='invalid'>{errors.pattern}</Form.Control.Feedback>
+              <Form.Control.Feedback type='invalid'>{errors.selector}</Form.Control.Feedback>
+            </Form.Group>
+          </Form.Row>
+          <Button type='submit' variant='dark' style={{ marginRight: '10px' }}>Search</Button>
+        </Form>
+      )}
     </Formik>
   )
 }
 
-export default PageSpecForm;
+export default PageSpecForm

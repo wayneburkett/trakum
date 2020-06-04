@@ -1,12 +1,12 @@
-import React, { useContext } from 'react';
-import { GlobalContext } from '../context/GlobalState';
-import { MatchPattern } from '../util/MatchPattern';
+import React, { useContext } from 'react'
+import { GlobalContext } from '../context/GlobalState'
+import { MatchPattern } from '../util/MatchPattern'
 
 export const CurrentPage = () => {
-  const { currentUrl, pageSpecs } = useContext(GlobalContext);
+  const { currentUrl, pageSpecs } = useContext(GlobalContext)
 
   const getMatches = (patterns, url) => {
-    return (patterns && url) 
+    return (patterns && url)
       ? patterns.filter(item => MatchPattern(item.pattern)(url))
       : []
   }
@@ -15,14 +15,12 @@ export const CurrentPage = () => {
 
   return (
     <>
-    {(matches && matches.length > 0) 
-      ? (
-        <ul className="page-spec-list">
-          {matches.map(spec => (<li>{spec.pattern}</li>))}
-        </ul>)
-      : (<span>There is nothing here.</span>)
-
-    }
+      {(matches && matches.length > 0)
+        ? (
+          <ul className='page-spec-list'>
+            {matches.map(spec => (<li>{spec.pattern}</li>))}
+          </ul>)
+        : (<span>There is nothing here.</span>)}
     </>
   )
 }

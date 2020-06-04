@@ -1,10 +1,10 @@
-import React, { useContext } from "react";
+import React, { useContext } from 'react'
 import PageSpecForm from './PageSpecForm'
 import { PageSpecList } from './PageSpecList'
 import { CurrentPage } from './CurrentPage'
 import { GlobalContext } from '../context/GlobalState'
 
-export function BrowserAction() {
+export function BrowserAction () {
   const { selectedKey } = useContext(GlobalContext)
 
   const render = (key) => {
@@ -21,8 +21,8 @@ export function BrowserAction() {
   }
 
   return (
-    <div className="page">
+    <div className='page'>
       {render(selectedKey)}
     </div>
-  );
+  )
 }
