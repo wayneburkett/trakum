@@ -14,7 +14,7 @@ const schema = Yup.object({
 })
 
 function PageSpecForm () {
-  const { addPageSpec } = useContext(GlobalContext)
+  const { currentUrl, addPageSpec } = useContext(GlobalContext)
 
   const handleSubmit = async evt => {
     const isValid = await schema.validate(evt)
@@ -26,7 +26,10 @@ function PageSpecForm () {
     <Formik
       validationSchema={schema}
       onSubmit={handleSubmit}
-      initialValues={{ selector: '', pattern: '' }}
+      initialValues={{
+        pattern: currentUrl && currentUrl.toString(),
+        selector: ''
+      }}
     >
       {({
         handleSubmit,
@@ -52,7 +55,7 @@ function PageSpecForm () {
             <Form.Group as={Col} md='12' controlId='selector'>
               <InputGroup className='mb-3'>
                 <InputGroup.Prepend>
-                  <InputGroup.Text id='basic-addon1'>@</InputGroup.Text>
+                  <InputGroup.Text id='basic-addon1'>CSS</InputGroup.Text>
                 </InputGroup.Prepend>
                 <Form.Control
                   type='text'
