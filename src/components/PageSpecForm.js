@@ -22,6 +22,10 @@ function PageSpecForm () {
     addPageSpec(evt)
   }
 
+  const handlePatternChange = e => {
+    console.log(e.target.value)
+  }
+
   return (
     <Formik
       validationSchema={schema}
@@ -62,7 +66,7 @@ function PageSpecForm () {
                   name='selector'
                   placeholder='Selector'
                   value={values.selector || ''}
-                  onChange={handleChange}
+                  onChange={(e) => { handleChange(e); handlePatternChange(e) }}
                   isInvalid={touched.selector && errors.selector}
                   aria-describedby='basic-addon1'
                 />
