@@ -6,6 +6,7 @@
  * @returns {} the new state
  */
 export default (state, action) => {
+  console.log(action)
   switch (action.type) {
     case 'SELECT_KEY':
       return {
@@ -15,6 +16,7 @@ export default (state, action) => {
     case 'ADD_PAGE_SPEC':
       return {
         ...state,
+        selectedKey: 'all',
         pageSpecs: [action.payload, ...state.pageSpecs]
       }
     case 'GET_CURRENT_URL':
