@@ -5,9 +5,9 @@ import { Navigation } from './components/Navigation'
 import { GlobalContext } from './context/GlobalState'
 
 function App () {
-  const { getCurrentUrl } = useContext(GlobalContext)
+  const { getCurrentTabInfo } = useContext(GlobalContext)
 
-  useEffect(() => getCurrentUrl(), [])
+  useEffect(() => getCurrentTabInfo(), [])
 
   return (
     <div className='App'>

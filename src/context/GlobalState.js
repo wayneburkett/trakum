@@ -16,8 +16,8 @@ const initialState = {
     }
   ],
   selectedKey: 'current',
-  currentUrl: null
-
+  currentUrl: null,
+  tabId: null
 }
 
 export const GlobalContext = createContext(initialState)
@@ -39,11 +39,11 @@ export const GlobalProvider = ({ children }) => {
     })
   }
 
-  function getCurrentUrl () {
+  function getCurrentTabInfo () {
     chrome.tabs.query({ active: true, currentWindow: true }, function ([tab]) {
       dispatch({
         type: 'GET_CURRENT_URL',
-        payload: new URL(tab.url)
+        payload: tab
       })
     })
   }
@@ -52,9 +52,10 @@ export const GlobalProvider = ({ children }) => {
     selectedKey: state.selectedKey,
     pageSpecs: state.pageSpecs,
     currentUrl: state.currentUrl,
+    tabId: state.tabId,
     addPageSpec,
     selectKey,
-    getCurrentUrl
+    getCurrentTabInfo
   }}
   >
     {children}

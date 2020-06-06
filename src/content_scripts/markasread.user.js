@@ -3,6 +3,19 @@ import { MessageRouter } from '../util/MessageRouter'
 
 const md5 = require('md5')
 
+chrome.runtime.onMessage.addListener((message, sender, response) => {
+  const { action, payload } = message
+  switch (action) {
+    case 'TEST_MATCH_PATTERN':
+      console.log("Got this: " + payload)
+      response({})
+      break
+    default:
+      response('unknown request')
+      break
+  }
+})
+
 function markElement (el) {
   el.classList.remove('trakum_new')
   el.classList.add('trakum_seen')

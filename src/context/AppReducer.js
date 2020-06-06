@@ -22,7 +22,8 @@ export default (state, action) => {
     case 'GET_CURRENT_URL':
       return {
         ...state,
-        currentUrl: action.payload
+        tabId: action.payload.id,
+        currentUrl: new URL(action.payload.url)
       }
     default:
       return state
