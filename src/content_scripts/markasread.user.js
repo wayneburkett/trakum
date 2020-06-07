@@ -1,5 +1,6 @@
 import { MatchPattern } from '../util/MatchPattern'
 import { MessageRouter } from '../util/MessageRouter'
+import { Storage } from '../util/Storage'
 
 const md5 = require('md5')
 
@@ -135,7 +136,7 @@ function saveMarked (page, comments) {
   if (page.dry) {
     return
   }
-  setValue(pageKey(), comments
+  Storage.set(pageKey(), comments
     .filter(([element]) => element.seen)
     .map(([,, id]) => id)
     .toString())
@@ -145,7 +146,7 @@ function getPreviouslyMarked (page, callback) {
   if (page.dry) {
     return callback({})
   }
-  getValue(pageKey(), function (items) {
+  Storage.get(pageKey(), function (items) {
     var seen = {}
     var ids = (items || '').split(',')
     for (var i = 0; i < ids.length; i++) {
@@ -154,20 +155,6 @@ function getPreviouslyMarked (page, callback) {
     callback(seen)
   })
 }
-
-function getValue (key, callback, _this) {
-  chrome.storage.local.get([key], function (items) {
-    if (callback) {
-      callback.call(_this || this, items && items[key])
-    }
-  })
-};
-
-function setValue (key, val, callback) {
-  var obj = {}
-  obj[key] = val
-  chrome.storage.local.set(obj, callback)
-};
 
 function getMatches (patterns, url) {
   return patterns.filter(item => MatchPattern(item.pattern)(url))
