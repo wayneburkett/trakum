@@ -1,6 +1,6 @@
 import React, { useContext } from 'react'
 import PageSpecForm from './PageSpecForm'
-import { PageSpecList } from './PageSpecList'
+import { All } from './All'
 import { CurrentPage } from './CurrentPage'
 import { GlobalContext } from '../context/GlobalState'
 
@@ -12,7 +12,7 @@ export function BrowserAction () {
       case 'current':
         return <CurrentPage />
       case 'all':
-        return <PageSpecList />
+        return <All />
       case 'new':
         return <PageSpecForm />
       default:

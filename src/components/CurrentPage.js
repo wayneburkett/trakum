@@ -1,6 +1,7 @@
 import React, { useContext } from 'react'
 import { GlobalContext } from '../context/GlobalState'
 import { MatchPattern } from '../util/MatchPattern'
+import { PageSpecList } from './PageSpecList'
 
 export const CurrentPage = () => {
   const { currentUrl, pageSpecs } = useContext(GlobalContext)
@@ -14,13 +15,8 @@ export const CurrentPage = () => {
   const matches = getMatches(pageSpecs, currentUrl)
 
   return (
-    <>
-      {(matches && matches.length > 0)
-        ? (
-          <ul className='page-spec-list'>
-            {matches.map(spec => (<li>{spec.pattern}</li>))}
-          </ul>)
-        : (<span>There is nothing here.</span>)}
-    </>
+    <div>
+      <PageSpecList title='Matches' pageSpecs={matches} />
+    </div>
   )
 }
