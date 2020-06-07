@@ -5,9 +5,10 @@ import { Navigation } from './components/Navigation'
 import { GlobalContext } from './context/GlobalState'
 
 function App () {
-  const { getCurrentTabInfo } = useContext(GlobalContext)
+  const { getCurrentTabInfo, getPageSpecs } = useContext(GlobalContext)
 
   useEffect(() => getCurrentTabInfo(), [])
+  useEffect(() => getPageSpecs(), [])
 
   return (
     <div className='App'>

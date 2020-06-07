@@ -6,12 +6,16 @@
  * @returns {} the new state
  */
 export default (state, action) => {
-  console.log(action)
   switch (action.type) {
     case 'SELECT_KEY':
       return {
         ...state,
         selectedKey: action.payload
+      }
+    case 'GET_PAGE_SPECS':
+      return {
+        ...state,
+        pageSpecs: [...action.payload]
       }
     case 'ADD_PAGE_SPEC':
       return {

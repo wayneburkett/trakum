@@ -1,6 +1,7 @@
 /* global chrome */
 
 import React, { createContext, useReducer } from 'react'
+import { MessageRouter } from '../util/MessageRouter'
 import AppReducer from './AppReducer'
 
 const initialState = {
@@ -22,10 +23,21 @@ export const GlobalProvider = ({ children }) => {
     })
   }
 
+  function getPageSpecs () {
+    MessageRouter.sendMessage('GET_MATCH_PATTERNS', null, (resp) => {
+      dispatch({
+        type: 'GET_PAGE_SPECS',
+        payload: resp
+      })
+    })
+  }
+
   function addPageSpec (pageSpec) {
-    dispatch({
-      type: 'ADD_PAGE_SPEC',
-      payload: pageSpec
+    MessageRouter.sendMessage('ADD_PAGE_SPEC', pageSpec, (resp) => {
+      dispatch({
+        type: 'ADD_PAGE_SPEC',
+        payload: pageSpec
+      })
     })
   }
 
@@ -43,6 +55,7 @@ export const GlobalProvider = ({ children }) => {
     pageSpecs: state.pageSpecs,
     currentUrl: state.currentUrl,
     tabId: state.tabId,
+    getPageSpecs,
     addPageSpec,
     selectKey,
     getCurrentTabInfo
