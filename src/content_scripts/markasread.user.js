@@ -133,9 +133,7 @@ function pageKey () {
 }
 
 function saveMarked (page, comments) {
-  if (page.dry) {
-    return
-  }
+  if (page.dry) return
   Storage.set(pageKey(), comments
     .filter(([element]) => element.seen)
     .map(([,, id]) => id)
