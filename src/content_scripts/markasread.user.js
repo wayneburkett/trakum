@@ -3,11 +3,25 @@ import { MessageRouter } from '../util/MessageRouter'
 
 const md5 = require('md5')
 
+const makeCommentRunner = () => {
+  let comments = null
+  return (query) => {
+    if (comments) comments.forEach(comment => comment.classList.remove('trakum_test'))
+    comments = getComments(query, {}, true)
+  }
+}
+
+const commentRunner = makeCommentRunner()
+
 chrome.runtime.onMessage.addListener((message, sender, response) => {
   const { action, payload } = message
   switch (action) {
     case 'TEST_MATCH_PATTERN':
-      console.log("Got this: " + payload)
+      try {
+        commentRunner(payload)
+      } catch (e) {
+        // ignore
+      }
       response({})
       break
     default:
@@ -84,7 +98,7 @@ function processElementNode (element, cache) {
   return [element, getY(element), id]
 }
 
-function getComments (query, cache) {
+function getComments (query, cache, dry = false) {
   var comments = document.evaluate(query, document, null,
     XPathResult.ORDERED_NODE_SNAPSHOT_TYPE, null)
   var res = []
@@ -93,7 +107,12 @@ function getComments (query, cache) {
     var node = comments.snapshotItem(i)
     switch (node.nodeType) {
       case Node.ELEMENT_NODE:
-        processedNode = processElementNode(node, cache)
+        if (!dry) {
+          processedNode = processElementNode(node, cache)
+        } else {
+          node.classList.add('trakum_test')
+          processedNode = node
+        }
         break
       default:
         // we can and probably should process other node types, but
