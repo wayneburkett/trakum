@@ -4,26 +4,26 @@ import { Storage } from '../util/Storage'
 
 const md5 = require('md5')
 
-const makeCommentRunner = () => {
+const commentRunner = (function () {
   let comments = null
   return (query) => {
     if (comments) comments.forEach(comment => comment.classList.remove('trakum_test'))
     comments = getComments(query, {}, true)
+    return comments.length
   }
-}
-
-const commentRunner = makeCommentRunner()
+})()
 
 chrome.runtime.onMessage.addListener((message, sender, response) => {
   const { action, payload } = message
   switch (action) {
     case 'TEST_MATCH_PATTERN':
+      let count = 0
       try {
-        commentRunner(payload)
+        count = commentRunner(payload)
       } catch (e) {
         // ignore
       }
-      response({})
+      response({ count })
       break
     default:
       response('unknown request')

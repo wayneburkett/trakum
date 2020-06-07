@@ -15,6 +15,7 @@ const schema = Yup.object({
 
 function PageSpecForm () {
   const [query, setQuery] = useState('')
+  const [count, setCount] = useState(0)
   const { currentUrl, tabId, addPageSpec } = useContext(GlobalContext)
 
   const handleSubmit = async evt => {
@@ -26,7 +27,8 @@ function PageSpecForm () {
   useEffect(() => {
     if (!tabId || !query || query.length <= 0) return
     MessageRouter.sendMessageToTab(tabId, 'TEST_MATCH_PATTERN', query, (response) => {
-      console.log(response)
+      if (!response) return
+      setCount(response.count)
     })
   }, [query, tabId])
 
@@ -73,6 +75,9 @@ function PageSpecForm () {
                 onChange={(e) => { handleChange(e); handlePatternChange(e) }}
                 isInvalid={!!errors.query}
               />
+              <Form.Text className="text-muted">
+              There are {(count > 0) ? count : 'no'} matches on the current page.
+              </Form.Text>
               <Form.Control.Feedback type='invalid'>{errors.query}</Form.Control.Feedback>
             </Form.Group>
           </Form.Row>
