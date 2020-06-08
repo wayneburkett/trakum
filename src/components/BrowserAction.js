@@ -1,18 +1,21 @@
 import React, { useContext } from 'react'
-import PageSpecForm from './PageSpecForm'
-import { All } from './All'
+import { PageSpecForm } from './PageSpecForm'
+import { AllPage } from './AllPage'
 import { CurrentPage } from './CurrentPage'
+import { EditPage } from './EditPage'
 import { GlobalContext } from '../context/GlobalState'
 
 export function BrowserAction () {
-  const { selectedKey } = useContext(GlobalContext)
+  const { currentPage } = useContext(GlobalContext)
 
-  const render = (key) => {
+  const render = ({ key, data = {} }) => {
     switch (key) {
       case 'current':
         return <CurrentPage />
       case 'all':
-        return <All />
+        return <AllPage />
+      case 'edit':
+        return <EditPage />
       case 'new':
         return <PageSpecForm />
       default:
@@ -22,7 +25,7 @@ export function BrowserAction () {
 
   return (
     <div className='page'>
-      {render(selectedKey)}
+      {render(currentPage)}
     </div>
   )
 }

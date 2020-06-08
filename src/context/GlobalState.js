@@ -6,7 +6,7 @@ import AppReducer from './AppReducer'
 
 const initialState = {
   pageSpecs: [],
-  selectedKey: 'current',
+  currentPage: { key: 'current', data: null },
   currentUrl: null,
   tabId: null
 }
@@ -16,10 +16,10 @@ export const GlobalContext = createContext(initialState)
 export const GlobalProvider = ({ children }) => {
   const [state, dispatch] = useReducer(AppReducer, initialState)
 
-  function selectKey (key) {
+  function selectKey (key, data) {
     dispatch({
       type: 'SELECT_KEY',
-      payload: key
+      payload: { key, data }
     })
   }
 
@@ -51,7 +51,7 @@ export const GlobalProvider = ({ children }) => {
   }
 
   return (<GlobalContext.Provider value={{
-    selectedKey: state.selectedKey,
+    currentPage: state.currentPage,
     pageSpecs: state.pageSpecs,
     currentUrl: state.currentUrl,
     tabId: state.tabId,

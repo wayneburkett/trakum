@@ -13,15 +13,20 @@ const schema = Yup.object({
   query: Yup.string().required('Query is required')
 })
 
-function PageSpecForm () {
+export const PageSpecForm = () => {
   const [query, setQuery] = useState('')
   const [count, setCount] = useState(0)
-  const { currentUrl, tabId, addPageSpec } = useContext(GlobalContext)
+  const { currentUrl, tabId, addPageSpec, currentPage } = useContext(GlobalContext)
 
   const handleSubmit = async evt => {
     const isValid = await schema.validate(evt)
     if (!isValid) return
-    addPageSpec(evt)
+    const { pattern, query } = evt
+    addPageSpec({
+      ...currentPage.data,
+      pattern,
+      query
+    })
   }
 
   useEffect(() => {
@@ -41,7 +46,8 @@ function PageSpecForm () {
       validationSchema={schema}
       onSubmit={handleSubmit}
       initialValues={{
-        pattern: currentUrl && currentUrl.toString()
+        pattern: currentPage.data ? currentPage.data.pattern : (currentUrl && currentUrl.toString()),
+        query: currentPage.data && currentPage.data.query
       }}
     >
       {({
@@ -87,5 +93,3 @@ function PageSpecForm () {
     </Formik>
   )
 }
-
-export default PageSpecForm

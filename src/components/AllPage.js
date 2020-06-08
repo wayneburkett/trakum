@@ -2,7 +2,7 @@ import React, { useContext } from 'react'
 import { PageSpecList } from './PageSpecList'
 import { GlobalContext } from '../context/GlobalState'
 
-export const All = () => {
+export const AllPage = () => {
   const { pageSpecs } = useContext(GlobalContext)
 
   return (
