@@ -17,13 +17,15 @@ export default (state, action) => {
     case 'GET_PAGE_SPECS':
       return {
         ...state,
-        pageSpecs: [...action.payload]
+        pageSpecs: [...action.payload.pageSpecs]
       }
     case 'ADD_PAGE_SPEC':
+    case 'EDIT_PAGE_SPEC':
+    case 'DELETE_PAGE_SPEC':
       return {
         ...state,
-        currentPage: { key: 'all', data: action.payload },
-        pageSpecs: [action.payload, ...state.pageSpecs]
+        currentPage: { key: 'all', data: action.payload.pageSpec },
+        pageSpecs: [...action.payload.pageSpecs]
       }
     case 'GET_CURRENT_URL':
       return {

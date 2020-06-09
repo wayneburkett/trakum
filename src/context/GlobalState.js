@@ -24,19 +24,37 @@ export const GlobalProvider = ({ children }) => {
   }
 
   function getPageSpecs () {
-    MessageRouter.sendMessage('GET_MATCH_PATTERNS', null, (resp) => {
+    MessageRouter.sendMessage('GET_MATCH_PATTERNS', null, (pageSpecs) => {
       dispatch({
         type: 'GET_PAGE_SPECS',
-        payload: resp
+        payload: { pageSpecs }
       })
     })
   }
 
   function addPageSpec (pageSpec) {
-    MessageRouter.sendMessage('ADD_PAGE_SPEC', pageSpec, (resp) => {
+    MessageRouter.sendMessage('ADD_PAGE_SPEC', pageSpec, (pageSpecs) => {
       dispatch({
         type: 'ADD_PAGE_SPEC',
-        payload: pageSpec
+        payload: { pageSpec, pageSpecs }
+      })
+    })
+  }
+
+  function editPageSpec (pageSpec) {
+    MessageRouter.sendMessage('EDIT_PAGE_SPEC', pageSpec, (pageSpecs) => {
+      dispatch({
+        type: 'EDIT_PAGE_SPEC',
+        payload: { pageSpec, pageSpecs }
+      })
+    })
+  }
+
+  function deletePageSpec (pageSpec) {
+    MessageRouter.sendMessage('DELETE_PAGE_SPEC', pageSpec, (pageSpecs) => {
+      dispatch({
+        type: 'DELETE_PAGE_SPEC',
+        payload: { pageSpec, pageSpecs }
       })
     })
   }
@@ -57,6 +75,8 @@ export const GlobalProvider = ({ children }) => {
     tabId: state.tabId,
     getPageSpecs,
     addPageSpec,
+    editPageSpec,
+    deletePageSpec,
     selectKey,
     getCurrentTabInfo
   }}

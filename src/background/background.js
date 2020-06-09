@@ -12,14 +12,22 @@ chrome.runtime.onMessage.addListener((message, sender, response) => {
       response({})
       break
     case 'GET_MATCH_PATTERNS':
-      response(trakum.allPageSpecs())
+      response(trakum.pageSpecs)
       break
     case 'GET_MATCHING_MATCH_PATTERNS':
       response(trakum.matches(payload))
       break
     case 'ADD_PAGE_SPEC':
       trakum.addPageSpec(payload)
-      response('success')
+      response(trakum.pageSpecs)
+      break
+    case 'EDIT_PAGE_SPEC':
+      trakum.updatePageSpec(payload)
+      response(trakum.pageSpecs)
+      break
+    case 'DELETE_PAGE_SPEC':
+      trakum.deletePageSpec(payload)
+      response(trakum.pageSpecs)
       break
     default:
       response('unknown request')

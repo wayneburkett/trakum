@@ -16,7 +16,7 @@ export const CurrentPage = () => {
 
   return (
     <div>
-      <PageSpecList title='Matches' pageSpecs={matches} />
+      <PageSpecList pageSpecs={matches} />
     </div>
   )
 }

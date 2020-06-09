@@ -20,8 +20,8 @@ export const PageSpecList = ({ pageSpecs, title }) => {
 
   return (
     <>
-    {title && (<h3>{title}</h3>)}
-    {(pageSpecs && pageSpecs.length > 0)
+      {title && (<h3>{title}</h3>)}
+      {(pageSpecs && pageSpecs.length > 0)
         ? renderTable(pageSpecs)
         : <span>There is nothing here.</span>}
     </>

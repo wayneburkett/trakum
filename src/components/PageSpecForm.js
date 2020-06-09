@@ -16,17 +16,31 @@ const schema = Yup.object({
 export const PageSpecForm = () => {
   const [query, setQuery] = useState('')
   const [count, setCount] = useState(0)
-  const { currentUrl, tabId, addPageSpec, currentPage } = useContext(GlobalContext)
+  const { currentUrl, tabId, addPageSpec, editPageSpec, deletePageSpec, currentPage, selectKey } = useContext(GlobalContext)
 
   const handleSubmit = async evt => {
     const isValid = await schema.validate(evt)
     if (!isValid) return
     const { pattern, query } = evt
-    addPageSpec({
-      ...currentPage.data,
-      pattern,
-      query
-    })
+    if (currentPage.data && currentPage.data.id) {
+      editPageSpec({
+        ...currentPage.data,
+        pattern,
+        query
+      })
+    } else {
+      addPageSpec({ pattern, query })
+    }
+  }
+
+  const handleCancel = e => {
+    selectKey('all')
+  }
+
+  const handleDelete = e => {
+    if (window.confirm('Delete this page spec?')) {
+      deletePageSpec(currentPage.data)
+    }
   }
 
   useEffect(() => {
@@ -81,13 +95,16 @@ export const PageSpecForm = () => {
                 onChange={(e) => { handleChange(e); handlePatternChange(e) }}
                 isInvalid={!!errors.query}
               />
-              <Form.Text className="text-muted">
+              <Form.Text className='text-muted'>
               There are {(count > 0) ? count : 'no'} matches on the current page.
               </Form.Text>
               <Form.Control.Feedback type='invalid'>{errors.query}</Form.Control.Feedback>
             </Form.Group>
           </Form.Row>
           <Button type='submit' variant='dark'>Save</Button>
+          {currentPage.data && currentPage.data.id &&
+            <Button type='button' variant='danger' style={{ 'margin-left': '10px' }} onClick={handleDelete}>Delete</Button>}
+          <Button type='button' variant='link' style={{ color: 'grey' }} onClick={handleCancel}>Cancel</Button>
         </Form>
       )}
     </Formik>

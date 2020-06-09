@@ -7,7 +7,7 @@ export const AllPage = () => {
 
   return (
     <div>
-      <PageSpecList title='All' pageSpecs={pageSpecs} />
+      <PageSpecList pageSpecs={pageSpecs} />
     </div>
   )
 }
