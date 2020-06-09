@@ -11,7 +11,12 @@ export const PageSpecListItem = ({ pageSpec }) => {
   }
 
   return (
-    <li><button onClick={handleEditOnClick}><EditIcon /></button> {pageSpec.pattern}</li>
+    <tr>
+      <td className="align-middle">
+        <button className='edit-button' onClick={handleEditOnClick}><EditIcon /></button>
+      </td>
+      <td className="align-middle">{pageSpec.pattern}</td>
+    </tr>
   )
 }
 
