@@ -6,7 +6,6 @@
  * @returns {} the new state
  */
 export default (state, action) => {
-  console.log(action)
   switch (action.type) {
     case 'SELECT_KEY':
       const { key, data } = action.payload
@@ -31,7 +30,7 @@ export default (state, action) => {
       return {
         ...state,
         tabId: action.payload.id,
-        currentUrl: new URL(action.payload.url)
+        currentUrl: action.payload.url && new URL(action.payload.url)
       }
     default:
       return state
