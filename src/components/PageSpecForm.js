@@ -44,7 +44,7 @@ export const PageSpecForm = () => {
   }
 
   useEffect(() => {
-    if (!tabId || !query || query.length <= 0) return
+    if (!tabId) return
     MessageRouter.sendMessageToTab(tabId, 'TEST_MATCH_PATTERN', query, (response) => {
       if (!response) return
       setCount(response.count)
