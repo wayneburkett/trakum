@@ -60,9 +60,9 @@ export const PageSpecForm = () => {
   }
 
   const openUrl = url => {
-    const  popup = chrome.extension.getViews({type: 'popup'})[0];
-    popup && popup.close();
-    chrome.tabs.create({ url });
+    const popup = chrome.extension.getViews({ type: 'popup' })[0]
+    popup && popup.close()
+    chrome.tabs.create({ url })
   }
 
   return (
@@ -111,10 +111,9 @@ export const PageSpecForm = () => {
                 isInvalid={!!errors.query}
               />
               <Form.Text className='text-muted'>
-                { (touched.query || !!values.query)
-                    ?  (<span>There are {(count > 0) ? (<b>{count}</b>) : 'no'} matches on the current page.</span>)
-                    :  (<span>Update the query to test it on the current page</span>)
-                }
+                {(touched.query || !!values.query)
+                  ? (<span>There are {(count > 0) ? (<b>{count}</b>) : 'no'} matches on the current page.</span>)
+                  : (<span>Update the query to test it on the current page</span>)}
               </Form.Text>
               <Form.Control.Feedback type='invalid'>{errors.query}</Form.Control.Feedback>
             </Form.Group>
