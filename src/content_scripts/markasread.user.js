@@ -123,10 +123,6 @@ function updateCount (comments) {
   MessageRouter.sendMessage('UPDATE_COUNT', newIds)
 }
 
-function getMatchPatterns (callback) {
-  MessageRouter.sendMessage('GET_MATCHING_MATCH_PATTERNS', window.location, callback)
-}
-
 function handlePage (page) {
   getPreviouslyMarked(page, function (cache) {
     const comments = getComments(page.query, cache)
@@ -142,9 +138,11 @@ function handlePage (page) {
   })
 }
 
-window.addEventListener('load', function () {
-  getMatchPatterns((response = []) => response.forEach(handlePage))
-}, false)
+function getMatchPatterns (callback) {
+  MessageRouter.sendMessage('GET_MATCHING_MATCH_PATTERNS', window.location, callback)
+}
+
+getMatchPatterns((response = []) => response.forEach(handlePage))
 
 // 2020-05-14 - 0.2 - converted to a chrome extension
 // 2008-12-12 - 0.1 - released
