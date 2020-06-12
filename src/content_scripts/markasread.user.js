@@ -116,10 +116,6 @@ function getPreviouslyMarked (page, callback) {
   })
 }
 
-function getMatches (patterns, url) {
-  return patterns.filter(item => MatchPattern(item.pattern)(url))
-}
-
 function updateCount (comments) {
   const newIds = comments
     .filter(item => !item.seen)
@@ -128,7 +124,7 @@ function updateCount (comments) {
 }
 
 function getMatchPatterns (callback) {
-  MessageRouter.sendMessage('GET_MATCH_PATTERNS', null, callback)
+  MessageRouter.sendMessage('GET_MATCHING_MATCH_PATTERNS', window.location, callback)
 }
 
 function handlePage (page) {
@@ -147,11 +143,8 @@ function handlePage (page) {
 }
 
 window.addEventListener('load', function () {
-  getMatchPatterns((response) => {
-    if (!response) return
-    getMatches(response, window.location).forEach(handlePage)
-  })
+  getMatchPatterns((response = []) => response.forEach(handlePage))
 }, false)
 
-// 2020-05-14 - 0.2 - convert to a chrome extension
+// 2020-05-14 - 0.2 - converted to a chrome extension
 // 2008-12-12 - 0.1 - released
