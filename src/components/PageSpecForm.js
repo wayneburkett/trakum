@@ -43,6 +43,8 @@ export const PageSpecForm = () => {
     }
   }
 
+  useEffect(() => setQuery(currentPage.data && currentPage.data.query), [])
+
   useEffect(() => {
     if (!tabId) return
     MessageRouter.sendMessageToTab(tabId, 'TEST_MATCH_PATTERN', query, (response) => {
@@ -82,6 +84,7 @@ export const PageSpecForm = () => {
                 name='pattern'
                 value={values.pattern}
                 onChange={handleChange}
+                onBlur={handleBlur}
                 isInvalid={!!errors.pattern}
               />
               <Form.Control.Feedback type='invalid'>{errors.pattern}</Form.Control.Feedback>
@@ -93,10 +96,14 @@ export const PageSpecForm = () => {
                 name='query'
                 value={values.query}
                 onChange={(e) => { handleChange(e); handlePatternChange(e) }}
+                onBlur={handleBlur}
                 isInvalid={!!errors.query}
               />
               <Form.Text className='text-muted'>
-              There are {(count > 0) ? count : 'no'} matches on the current page.
+              { (touched.query || !!values.query)
+                  ?  (<span>There are {(count > 0) ? (<b>{count}</b>) : 'no'} matches on the current page.</span>)
+                  :  (<span>Update the query to test it on the current page</span>)
+              }
               </Form.Text>
               <Form.Control.Feedback type='invalid'>{errors.query}</Form.Control.Feedback>
             </Form.Group>
