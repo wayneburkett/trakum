@@ -37,11 +37,7 @@ function markElement (el) {
   el.classList.add('trakum_seen')
 }
 
-// execute callback only after a pause in user input; the function returned
-// can be used to handle an event type that tightly repeats (such as typing
-// or scrolling events); it will execute the callback only if the given timout
-// period has passed since the last time the same event fired
-function createOnPause (timeout, callback) {
+function debounce (timeout, callback) {
   let timer = null
   return function (e) {
     if (timer) clearTimeout(timer)
@@ -139,7 +135,7 @@ function handlePage (page) {
   getPreviouslyMarked(page, function (cache) {
     const comments = getComments(page.query, cache)
     updateCount(comments)
-    document.addEventListener('scroll', createOnPause(1500, function () {
+    document.addEventListener('scroll', debounce(1500, function () {
       forEachVisibleElement(comments, (item) => {
         item.seen = true
         markElement(item.element)
