@@ -1,3 +1,5 @@
+/* global chrome */
+
 import React, { useContext, useState, useEffect } from 'react'
 import { Formik } from 'formik'
 import Form from 'react-bootstrap/Form'
@@ -17,6 +19,16 @@ export const PageSpecForm = () => {
   const [query, setQuery] = useState('')
   const [count, setCount] = useState(0)
   const { currentUrl, tabId, addPageSpec, editPageSpec, deletePageSpec, currentPage, selectKey } = useContext(GlobalContext)
+
+  useEffect(() => setQuery(currentPage.data && currentPage.data.query), [])
+
+  useEffect(() => {
+    if (!tabId) return
+    MessageRouter.sendMessageToTab(tabId, 'TEST_MATCH_PATTERN', query, (response) => {
+      if (!response) return
+      setCount(response.count)
+    })
+  }, [query, tabId])
 
   const handleSubmit = async evt => {
     const isValid = await schema.validate(evt)
@@ -43,18 +55,14 @@ export const PageSpecForm = () => {
     }
   }
 
-  useEffect(() => setQuery(currentPage.data && currentPage.data.query), [])
-
-  useEffect(() => {
-    if (!tabId) return
-    MessageRouter.sendMessageToTab(tabId, 'TEST_MATCH_PATTERN', query, (response) => {
-      if (!response) return
-      setCount(response.count)
-    })
-  }, [query, tabId])
-
   const handlePatternChange = e => {
     setQuery(e.target.value)
+  }
+
+  const openUrl = url => {
+    const  popup = chrome.extension.getViews({type: 'popup'})[0];
+    popup && popup.close();
+    chrome.tabs.create({ url });
   }
 
   return (
@@ -87,6 +95,9 @@ export const PageSpecForm = () => {
                 onBlur={handleBlur}
                 isInvalid={!!errors.pattern}
               />
+              <Form.Text className='text-muted'>
+                Format: <a href='https://developer.chrome.com/extensions/match_patterns' onClick={e => openUrl(e.target.href)}>https://developer.chrome.com/extensions/match_patterns</a>
+              </Form.Text>
               <Form.Control.Feedback type='invalid'>{errors.pattern}</Form.Control.Feedback>
             </Form.Group>
             <Form.Group as={Col} md='4' controlId='validationFormik02'>
@@ -100,10 +111,10 @@ export const PageSpecForm = () => {
                 isInvalid={!!errors.query}
               />
               <Form.Text className='text-muted'>
-              { (touched.query || !!values.query)
-                  ?  (<span>There are {(count > 0) ? (<b>{count}</b>) : 'no'} matches on the current page.</span>)
-                  :  (<span>Update the query to test it on the current page</span>)
-              }
+                { (touched.query || !!values.query)
+                    ?  (<span>There are {(count > 0) ? (<b>{count}</b>) : 'no'} matches on the current page.</span>)
+                    :  (<span>Update the query to test it on the current page</span>)
+                }
               </Form.Text>
               <Form.Control.Feedback type='invalid'>{errors.query}</Form.Control.Feedback>
             </Form.Group>
@@ -117,3 +128,6 @@ export const PageSpecForm = () => {
     </Formik>
   )
 }
+/**
+ *  
+ */
