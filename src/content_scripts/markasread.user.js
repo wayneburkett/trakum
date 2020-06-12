@@ -1,4 +1,3 @@
-import { MatchPattern } from '../util/MatchPattern'
 import { MessageRouter } from '../util/MessageRouter'
 import { Storage } from '../util/Storage'
 import { forEachVisibleElement, getY } from '../util/ScreenCoverage'
@@ -102,7 +101,7 @@ function saveMarked (page, comments) {
     .toString())
 }
 
-function getPreviouslyMarked (page, callback) {
+function getSaved (page, callback) {
   if (page.dry) {
     return callback({})
   }
@@ -123,18 +122,22 @@ function updateCount (comments) {
   MessageRouter.sendMessage('UPDATE_COUNT', newIds)
 }
 
+function createScrollHandler (page, items) {
+  document.addEventListener('scroll', debounce(1500, function () {
+    forEachVisibleElement(items, (item) => {
+      item.seen = true
+      markElement(item.element)
+    })
+    saveMarked(page, items)
+    updateCount(items)
+  }), false)
+}
+
 function handlePage (page) {
-  getPreviouslyMarked(page, function (cache) {
+  getSaved(page, function (cache) {
     const comments = getComments(page.query, cache)
     updateCount(comments)
-    document.addEventListener('scroll', debounce(1500, function () {
-      forEachVisibleElement(comments, (item) => {
-        item.seen = true
-        markElement(item.element)
-      })
-      saveMarked(page, comments)
-      updateCount(comments)
-    }), false)
+    createScrollHandler(page, comments)
   })
 }
 
