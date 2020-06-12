@@ -3,12 +3,12 @@ import Table from 'react-bootstrap/Table'
 import { PageSpecListItem } from './PageSpecListItem'
 
 export const PageSpecList = ({ pageSpecs, title }) => {
-  const renderTable = (pageSpecs) => {
+  const renderTable = () => {
     return (
       <Table striped bordered>
         <thead>
           <tr>
-            <th colspan='2'>Match Patterns</th>
+            <th colspan='2'>{title}</th>
           </tr>
         </thead>
         <tbody>
@@ -20,9 +20,8 @@ export const PageSpecList = ({ pageSpecs, title }) => {
 
   return (
     <>
-      {title && (<h3>{title}</h3>)}
       {(pageSpecs && pageSpecs.length > 0)
-        ? renderTable(pageSpecs)
+        ? renderTable()
         : <span>There is nothing here.</span>}
     </>
   )

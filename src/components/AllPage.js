@@ -7,7 +7,7 @@ export const AllPage = () => {
 
   return (
     <div>
-      <PageSpecList pageSpecs={pageSpecs} />
+      <PageSpecList title='All Match Patterns' pageSpecs={pageSpecs} />
     </div>
   )
 }

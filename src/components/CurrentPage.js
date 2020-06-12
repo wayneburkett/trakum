@@ -16,7 +16,7 @@ export const CurrentPage = () => {
 
   return (
     <div>
-      <PageSpecList pageSpecs={matches} />
+      <PageSpecList title='Active Match Patterns' pageSpecs={matches} />
     </div>
   )
 }
