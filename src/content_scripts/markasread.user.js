@@ -89,7 +89,7 @@ function getComments (query, cache, dry = false) {
 }
 
 function pageKey () {
-  if (!pageKey._value) pageKey._value = document.location.href
+  if (!pageKey._value) pageKey._value = "!" + document.location.href
   return pageKey._value
 }
 
@@ -97,20 +97,16 @@ function saveMarked (page, comments) {
   if (page.dry) return
   Storage.set(pageKey(), comments
     .filter(item => item.seen)
-    .map(item => item.id)
-    .toString())
+    .map(item => item.id))
 }
 
 function getSaved (page, callback) {
   if (page.dry) {
     return callback({})
   }
-  Storage.get(pageKey(), function (items) {
+  Storage.get(pageKey(), function (items = []) {
     var seen = {}
-    var ids = (items || '').split(',')
-    for (var i = 0; i < ids.length; i++) {
-      seen[ids[i]] = true
-    }
+    items.forEach(id => seen[id] = true)
     callback(seen)
   })
 }
