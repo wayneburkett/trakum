@@ -1,6 +1,6 @@
 import { MessageRouter } from '../util/MessageRouter'
 import { Storage } from '../util/Storage'
-import { forEachVisibleElement, getY } from '../util/ScreenCoverage'
+import { forEachVisibleElement } from '../util/ScreenCoverage'
 
 const md5 = require('md5')
 
@@ -53,7 +53,6 @@ function processElementNode (element, cache) {
   }
   element.classList.add('trakum_element')
   return {
-    position: getY(element),
     element,
     id,
     seen: !!cache[id]

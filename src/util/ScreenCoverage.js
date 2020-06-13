@@ -17,16 +17,12 @@ function getCurrentCoverage () {
   }
 }
 
-function isVisible (el, coverage) {
-  return el.position >= coverage.top && el.position <= coverage.bottom
+function isVisible (item, coverage) {
+  const top = getY(item.element)
+  return top >= coverage.top && top <= coverage.bottom
 }
 
-/**
- * getY.
- *
- * @param {} el
- */
-export function getY (el) {
+function getY (el) {
   return getOffset(el).top
 }
 
