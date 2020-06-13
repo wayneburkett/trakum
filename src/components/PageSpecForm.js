@@ -1,5 +1,3 @@
-/* global chrome */
-
 import React, { useContext, useState, useEffect } from 'react'
 import { Formik } from 'formik'
 import Form from 'react-bootstrap/Form'
@@ -8,6 +6,7 @@ import Button from 'react-bootstrap/Button'
 import * as Yup from 'yup'
 import { MatchPattern } from '../util/MatchPattern'
 import { MessageRouter } from '../util/MessageRouter'
+import { openUrl, getPopup } from '../util/Chrome'
 import { GlobalContext } from '../context/GlobalState'
 
 const schema = Yup.object({
@@ -59,10 +58,10 @@ export const PageSpecForm = () => {
     setQuery(e.target.value)
   }
 
-  const openUrl = url => {
-    const popup = chrome.extension.getViews({ type: 'popup' })[0]
+  const handleLinkClick = e => {
+    const popup = getPopup()
     popup && popup.close()
-    chrome.tabs.create({ url })
+    openUrl(e.target.href)
   }
 
   return (
@@ -96,7 +95,7 @@ export const PageSpecForm = () => {
                 isInvalid={!!errors.pattern}
               />
               <Form.Text className='text-muted'>
-                Format: <a href='https://developer.chrome.com/extensions/match_patterns' onClick={e => openUrl(e.target.href)}>https://developer.chrome.com/extensions/match_patterns</a>
+                Format: <a href='https://developer.chrome.com/extensions/match_patterns' onClick={handleLinkClick}>https://developer.chrome.com/extensions/match_patterns</a>
               </Form.Text>
               <Form.Control.Feedback type='invalid'>{errors.pattern}</Form.Control.Feedback>
             </Form.Group>

@@ -1,7 +1,6 @@
-/* global chrome */
-
 import React, { createContext, useReducer } from 'react'
 import { MessageRouter } from '../util/MessageRouter'
+import { getCurrentTab } from '../util/Chrome'
 import AppReducer from './AppReducer'
 
 const initialState = {
@@ -60,7 +59,7 @@ export const GlobalProvider = ({ children }) => {
   }
 
   function getCurrentTabInfo () {
-    chrome.tabs.query({ active: true, currentWindow: true }, function ([tab]) {
+    getCurrentTab(tab => {
       dispatch({
         type: 'GET_CURRENT_URL',
         payload: tab

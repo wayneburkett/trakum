@@ -1,10 +1,9 @@
-/* global chrome */
-
 import { Trakum } from '../util/Trakum'
+import { addListener, setBadgeText } from '../util/Chrome'
 
 const trakum = new Trakum()
 
-chrome.runtime.onMessage.addListener((message, sender, response) => {
+addListener((message, sender, response) => {
   const { action, payload } = message
   switch (action) {
     case 'UPDATE_COUNT':
@@ -34,10 +33,3 @@ chrome.runtime.onMessage.addListener((message, sender, response) => {
       break
   }
 })
-
-function setBadgeText (tabId, val) {
-  chrome.browserAction.setBadgeText({
-    text: (val > 0 ? String(val) : ''),
-    tabId
-  })
-}

@@ -1,6 +1,7 @@
 import { MessageRouter } from '../util/MessageRouter'
 import { Storage } from '../util/Storage'
 import { forEachVisibleElement } from '../util/ScreenCoverage'
+import { addListener } from '../util/Chrome'
 
 const md5 = require('md5')
 
@@ -13,7 +14,7 @@ const commentRunner = (function () {
   }
 })()
 
-chrome.runtime.onMessage.addListener((message, sender, response) => {
+addListener((message, sender, response) => {
   const { action, payload } = message
   switch (action) {
     case 'TEST_MATCH_PATTERN':
@@ -88,7 +89,7 @@ function getComments (query, cache, dry = false) {
 }
 
 function pageKey () {
-  if (!pageKey._value) pageKey._value = "!" + document.location.href
+  if (!pageKey._value) pageKey._value = '!' + document.location.href
   return pageKey._value
 }
 
