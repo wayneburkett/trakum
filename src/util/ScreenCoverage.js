@@ -2,24 +2,19 @@ function getViewportHeight () {
   return Math.min(document.documentElement.clientHeight, document.body.clientHeight)
 }
 
-function getScrollTop () {
-  return Math.max(document.documentElement.scrollTop, document.body.scrollTop)
-}
-
 function getOffset (el) {
-  let top = 0
-  let left = 0
-  while (el.offsetParent) {
-    left += el.offsetLeft
-    top += el.offsetTop
-    el = el.offsetParent
+  const rect = el.getBoundingClientRect()
+  return {
+    left: rect.left + window.scrollX,
+    top: rect.top + window.scrollY
   }
-  return { left, top }
 }
 
 function getCurrentCoverage () {
-  const top = getScrollTop()
-  return { top, bottom: top + getViewportHeight() }
+  return {
+    top: window.scrollY,
+    bottom: window.scrollY + getViewportHeight()
+  }
 }
 
 function isVisible (el, coverage) {
