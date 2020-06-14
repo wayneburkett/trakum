@@ -16,3 +16,15 @@ button.edit-button {
   cursor: pointer;
   outline: inherit;
 }
+
+fieldset#advanced-options legend {
+  margin-bottom: 0;
+  padding: 0;
+}
+
+fieldset#advanced-options span.title {
+  display: block;
+  font-weight: bold;
+  margin: 5px 0;
+}
+

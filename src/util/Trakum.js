@@ -29,12 +29,13 @@ export class Trakum {
   }
 
   addPageSpec (pageSpec) {
-    const { pattern, query } = pageSpec
+    const { pattern, query, markStrategy = 100 } = pageSpec
     this._pageSpecs.push({
       id: uuidv4(),
       created: new Date(),
       pattern,
-      query
+      query,
+      markStrategy
     })
     this.save()
   }

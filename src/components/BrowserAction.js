@@ -1,8 +1,8 @@
 import React, { useContext } from 'react'
-import { PageSpecForm } from './PageSpecForm'
 import { AllPage } from './AllPage'
 import { CurrentPage } from './CurrentPage'
 import { EditPage } from './EditPage'
+import { NewPage } from './NewPage'
 import { GlobalContext } from '../context/GlobalState'
 
 export function BrowserAction () {
@@ -17,7 +17,7 @@ export function BrowserAction () {
       case 'edit':
         return <EditPage />
       case 'new':
-        return <PageSpecForm />
+        return <NewPage />
       default:
         return <></>
     }

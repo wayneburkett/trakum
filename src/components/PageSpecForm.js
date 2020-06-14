@@ -6,12 +6,12 @@ import Button from 'react-bootstrap/Button'
 import * as Yup from 'yup'
 import { MatchPattern } from '../util/MatchPattern'
 import { MessageRouter } from '../util/MessageRouter'
-import { openUrl, getPopup } from '../util/Chrome'
 import { GlobalContext } from '../context/GlobalState'
 
 const schema = Yup.object({
   pattern: Yup.string().matches(MatchPattern.MATCH_PATTERN_REGEX).required('Match pattern is required'),
-  query: Yup.string().required('Query is required')
+  query: Yup.string().required('Query is required'),
+  markStrategy: Yup.number()
 })
 
 export const PageSpecForm = () => {
@@ -32,15 +32,16 @@ export const PageSpecForm = () => {
   const handleSubmit = async evt => {
     const isValid = await schema.validate(evt)
     if (!isValid) return
-    const { pattern, query } = evt
+    const { pattern, query, markStrategy = 100 } = evt
     if (currentPage.data && currentPage.data.id) {
       editPageSpec({
         ...currentPage.data,
         pattern,
-        query
+        query,
+        markStrategy: markStrategy * 1
       })
     } else {
-      addPageSpec({ pattern, query })
+      addPageSpec({ pattern, query, markStrategy: markStrategy * 1 })
     }
   }
 
@@ -58,19 +59,15 @@ export const PageSpecForm = () => {
     setQuery(e.target.value)
   }
 
-  const handleLinkClick = e => {
-    const popup = getPopup()
-    popup && popup.close()
-    openUrl(e.target.href)
-  }
-
   return (
     <Formik
       validationSchema={schema}
+      validateOnChange={false}
       onSubmit={handleSubmit}
       initialValues={{
-        pattern: currentPage.data ? currentPage.data.pattern : (currentUrl && currentUrl.toString()),
-        query: currentPage.data && currentPage.data.query
+        pattern: currentPage.data ? currentPage.data.pattern : (currentUrl && currentUrl.toString()) || '',
+        query: (currentPage.data && currentPage.data.query) || '',
+        markStrategy: (currentPage.data && currentPage.data.markStrategy === 101) ? 101 : 100
       }}
     >
       {({
@@ -95,7 +92,6 @@ export const PageSpecForm = () => {
                 isInvalid={!!errors.pattern}
               />
               <Form.Text className='text-muted'>
-                Format: <a href='https://developer.chrome.com/extensions/match_patterns' onClick={handleLinkClick}>https://developer.chrome.com/extensions/match_patterns</a>
               </Form.Text>
               <Form.Control.Feedback type='invalid'>{errors.pattern}</Form.Control.Feedback>
             </Form.Group>
@@ -117,10 +113,25 @@ export const PageSpecForm = () => {
               <Form.Control.Feedback type='invalid'>{errors.query}</Form.Control.Feedback>
             </Form.Group>
           </Form.Row>
-          <Button type='submit' variant='dark'>Save</Button>
-          {currentPage.data && currentPage.data.id &&
-            <Button type='button' variant='danger' style={{ 'margin-left': '10px' }} onClick={handleDelete}>Delete</Button>}
-          <Button type='button' variant='link' style={{ color: 'grey' }} onClick={handleCancel}>Cancel</Button>
+          <Form.Row>
+            <Form.Group as={Col} md='4' controlId='validationFormik03'>
+              <fieldset id='advanced-options'>
+                <legend>Advanced Options</legend>
+                <div className='section' style={{ display: 'none' }} />
+                <div className='section'>
+                  <span className='title'>Marking Items</span>
+                  <Form.Check custom onChange={handleChange} defaultChecked={values.markStrategy === 100} id='radio4' type='radio' value='100' label='Mark items visited when scrolled into view' name='markStrategy' />
+                  <Form.Check custom onChange={handleChange} defaultChecked={values.markStrategy === 101} id='radio3' type='radio' value='101' label='Mark items visited when the page loads' name='markStrategy' />
+                </div>
+              </fieldset>
+            </Form.Group>
+          </Form.Row>
+          <Form.Row>
+            <Button type='submit' variant='dark'>Save</Button>
+            {currentPage.data && currentPage.data.id &&
+              <Button type='button' variant='danger' style={{ 'margin-left': '10px' }} onClick={handleDelete}>Delete</Button>}
+            <Button type='button' variant='link' style={{ color: 'grey' }} onClick={handleCancel}>Cancel</Button>
+          </Form.Row>
         </Form>
       )}
     </Formik>
