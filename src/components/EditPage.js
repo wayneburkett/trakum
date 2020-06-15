@@ -5,10 +5,11 @@ import { GlobalContext } from '../context/GlobalState'
 export const EditPage = () => {
   const { currentUrl, tabId, currentPage } = useContext(GlobalContext)
 
-  console.log(currentPage.data)
   return (
     <div>
-      <p>{currentPage.data.id}</p>
+      <span><b>ID</b>: {currentPage.data.id}</span><br />
+      <span><b>Created</b>: {currentPage.data.created}</span><br />
+      <br />
       <PageSpecForm />
     </div>
   )

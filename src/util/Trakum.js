@@ -5,6 +5,10 @@ const { v4: uuidv4 } = require('uuid')
 
 const PAGE_SPEC_KEY = 'TPageSpecs'
 
+function isString(x) {
+  return Object.prototype.toString.call(x) === '[object String]'
+}
+
 export class Trakum {
   constructor () { this.init() }
 
@@ -14,9 +18,12 @@ export class Trakum {
 
   init () {
     this._pageSpecs = []
-    Storage.get(PAGE_SPEC_KEY, (_pageSpecs) => {
-      if (!_pageSpecs || _pageSpecs.length <= 0) return
-      this._pageSpecs = _pageSpecs
+    Storage.get(PAGE_SPEC_KEY, (_pageSpecs = []) => {
+      if (!_pageSpecs || _pageSpecs.length <= 0) return []
+      this._pageSpecs = _pageSpecs.map(spec => {
+        spec.created = new Date(isString(spec.created) ? spec.created : 0)
+        return spec
+      })
     })
   }
 
@@ -32,7 +39,7 @@ export class Trakum {
     const { pattern, query, markStrategy = 100 } = pageSpec
     this._pageSpecs.push({
       id: uuidv4(),
-      created: new Date(),
+      created: (new Date()).toJSON(),
       pattern,
       query,
       markStrategy
