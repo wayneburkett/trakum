@@ -2,18 +2,22 @@
 
 export class Storage {
   static get (key, callback, _this) {
-    if (!chrome) return
-    chrome.storage.local.get([key], function (items) {
-      if (callback) {
-        callback.call(_this || this, items && items[key])
-      }
-    })
+    try {
+      chrome.storage.local.get([key], function (result) {
+        if (callback) {
+          callback.call(_this || this, result && result[key])
+        }
+      })
+    } catch (e) {
+      console.log(e)
+    }
   }
 
   static set (key, val, callback) {
-    if (!chrome) return
-    var obj = {}
-    obj[key] = val
-    chrome.storage.local.set(obj, callback)
+    try {
+      chrome.storage.local.set({ [key]: val }, callback)
+    } catch (e) {
+      console.log(e)
+    }
   }
 }
