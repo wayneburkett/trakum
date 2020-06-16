@@ -76,6 +76,10 @@ class Tracker {
     return this._items.filter(item => item.seen)
   }
 
+  get new () {
+    return this._items.filter(item => !item.seen)
+  }
+
   getCachedItems (cache = {}) {
     return this._items.filter(item => cache[item.id])
   }
@@ -94,7 +98,7 @@ class Tracker {
       item.seen = true
       markVisited(item.element)
     })
-    updateCount(this._items)
+    updateCount(this.new)
     if (save) this._save()
   }
 
@@ -114,9 +118,7 @@ class Tracker {
 }
 
 function updateCount (items) {
-  const newIds = items
-    .filter(item => !item.seen)
-    .map(item => item.id)
+  const newIds = items.map(item => item.id)
   MessageRouter.sendMessage('UPDATE_COUNT', newIds)
 }
 
