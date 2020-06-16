@@ -87,10 +87,23 @@ class Tracker {
   start () {
     this._get(cache => {
       this._update(this.getCachedItems(cache))
-      addCoverageListener(1500, this._items, (visible) => {
-        this._update(visible, true)
-      })
+      this._mark()
     })
+  }
+
+  _mark () {
+    switch (this._page.markStrategy) {
+      case 100:
+        addCoverageListener(1500, this._items, (visible) => {
+          this._update(visible, true)
+        })
+        break
+      case 101:
+      default:
+        this._items.forEach(item => item.seen = true)
+        this._save()
+        break
+    }
   }
 
   _update (items = [], save = false) {
