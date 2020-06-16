@@ -5,7 +5,7 @@ const { v4: uuidv4 } = require('uuid')
 
 const PAGE_SPEC_KEY = 'TPageSpecs'
 
-function isString(x) {
+function isString (x) {
   return Object.prototype.toString.call(x) === '[object String]'
 }
 

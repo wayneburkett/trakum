@@ -26,15 +26,18 @@ function getY (el) {
   return getOffset(el).top
 }
 
-/**
- * Performs an action for each visible element.
- *
- * @param {} elements an array of objects each having element and position properties
- * @param {} fn the function to apply to each visible element
- */
-export function forEachVisibleElement (elements = [], fn) {
-  const coverage = getCurrentCoverage()
-  elements
-    .filter(item => (isVisible(item, coverage) && !item.seen))
-    .forEach(fn)
+function debounce (timeout, callback) {
+  let timer = null
+  return (e) => {
+    if (timer) clearTimeout(timer)
+    timer = setTimeout(callback, timeout)
+  }
+}
+
+export function addCoverageListener (delay, items, callback) {
+  document.addEventListener('scroll', debounce(delay, () => {
+    const coverage = getCurrentCoverage()
+    const visible = items.filter(item => isVisible(item, coverage))
+    callback(visible)
+  }), false)
 }

@@ -1,8 +1,8 @@
-.trakum_element {
+.trakum_new {
     border: 1px solid red;
 }
 
-.trakum_element.trakum_seen {
+.trakum_seen {
     border: 1px solid blue;
 }
 
