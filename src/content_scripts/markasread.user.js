@@ -80,6 +80,10 @@ class Tracker {
     return this._items.filter(item => !item.seen)
   }
 
+  get created () {
+    return this._created || (new Date()).toJSON()
+  }
+
   getCachedItems (cache = {}) {
     return this._items.filter(item => cache[item.id])
   }
@@ -116,10 +120,9 @@ class Tracker {
   }
 
   _get (callback) {
-    this._storage.get((items = []) => {
-      var seen = {}
-      items.forEach(id => seen[id] = true)
-      callback(seen)
+    this._storage.get(response => {
+      this._created = response.created
+      callback(response.seen)
     })
   }
 
@@ -131,17 +134,24 @@ class Tracker {
 class TrackerStorage {
   constructor (tracker) {
     this._tracker = tracker
-    this._pageKey = document.location.href
+    this._pageKey = '_' + document.location.href
   }
 
   get (callback) {
-    Storage.get(this._pageKey, callback)
+    Storage.get(this._pageKey, (response = {}) => {
+      const { created, items = [] } = response
+      var seen = {}
+      items.forEach(id => seen[id] = true)
+      callback({ created, seen })
+    })
   }
 
   save () {
-    Storage.set(
-      this._pageKey,
-      this._tracker.visited.map(item => item.id))
+    Storage.set(this._pageKey, {
+      created: this._tracker.created,
+      lastVisited: (new Date()).toJSON(),
+      items: this._tracker.visited.map(item => item.id)
+    })
   }
 }
 
