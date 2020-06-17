@@ -23,11 +23,15 @@ export const PageSpecForm = () => {
 
   useEffect(() => {
     if (!tabId) return
-    MessageRouter.sendMessageToTab(tabId, 'TEST_MATCH_PATTERN', query, (response) => {
-      if (!response) return
-      setCount(response.count)
-    })
+    applyTestQuery(tabId, query, response => setCount(response.count))
+    return () => applyTestQuery(tabId, '')
   }, [query, tabId])
+
+  const applyTestQuery = (tabId, query, callback) => {
+    MessageRouter.sendMessageToTab(tabId, 'TEST_QUERY', query, response => {
+      if (callback && response) callback(response)
+    })
+  }
 
   const handleSubmit = async evt => {
     const isValid = await schema.validate(evt)

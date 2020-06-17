@@ -5,7 +5,7 @@ import { addListener } from '../util/Chrome'
 
 const md5 = require('md5')
 
-const commentRunner = (function () {
+const queryRunner = (function () {
   const testClass = 'trakum_test'
   let items = null
 
@@ -19,10 +19,10 @@ const commentRunner = (function () {
 addListener((message, sender, response) => {
   const { action, payload } = message
   switch (action) {
-    case 'TEST_MATCH_PATTERN':
+    case 'TEST_QUERY':
       let count = 0
       try {
-        count = commentRunner(payload)
+        count = queryRunner(payload)
       } catch (e) {
         // ignore
       }
