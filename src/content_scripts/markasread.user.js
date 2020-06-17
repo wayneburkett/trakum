@@ -68,8 +68,8 @@ function markVisited (el) {
 class Tracker {
   constructor (page) {
     this._page = page
-    this._pageKey = document.location.href
     this._items = select(page.query)
+    this._storage = new TrackerStorage(this)
   }
 
   get visited () {
@@ -116,7 +116,7 @@ class Tracker {
   }
 
   _get (callback) {
-    Storage.get(this._pageKey, (items = []) => {
+    this._storage.get((items = []) => {
       var seen = {}
       items.forEach(id => seen[id] = true)
       callback(seen)
@@ -124,9 +124,24 @@ class Tracker {
   }
 
   _save () {
+    this._storage.save()
+  }
+}
+
+class TrackerStorage {
+  constructor (tracker) {
+    this._tracker = tracker
+    this._pageKey = document.location.href
+  }
+
+  get (callback) {
+    Storage.get(this._pageKey, callback)
+  }
+
+  save () {
     Storage.set(
       this._pageKey,
-      this.visited.map(item => item.id))
+      this._tracker.visited.map(item => item.id))
   }
 }
 
