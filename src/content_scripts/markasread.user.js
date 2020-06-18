@@ -140,8 +140,10 @@ class TrackerStorage {
   get (callback) {
     Storage.get(this._pageKey, (response = {}) => {
       const { created, items = [] } = response
-      var seen = {}
-      items.forEach(id => seen[id] = true)
+      const seen = items.reduce((acc, curr) => {
+        acc[curr] = true
+        return acc
+      }, {})
       callback({ created, seen })
     })
   }
