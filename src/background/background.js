@@ -1,5 +1,6 @@
 import { Trakum } from '../util/Trakum'
-import { addListener, setBadgeText } from '../util/Chrome'
+import { addListener, setBadgeText, addPageContextMenu } from '../util/Chrome'
+import { MessageRouter } from '../util/MessageRouter'
 
 const trakum = new Trakum()
 
@@ -32,4 +33,9 @@ addListener((message, sender, response) => {
       response('unknown request')
       break
   }
+})
+
+addPageContextMenu('Mark all unread', (info = {}, tab = {}) => {
+  if (!tab.id) return
+  MessageRouter.sendMessageToTab(tab.id, 'MARK_ALL_UNREAD')
 })

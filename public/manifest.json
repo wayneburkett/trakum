@@ -19,7 +19,7 @@
     "default_title": "Trakum"
   },
   "permissions": [
-    "<all_urls>", "storage"
+    "<all_urls>", "storage", "contextMenus"
   ],
   "content_scripts": [
     {

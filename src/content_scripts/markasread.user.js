@@ -65,11 +65,32 @@ function markVisited (el) {
   el.classList.add('trakum_seen')
 }
 
+function markNew (el) {
+  el.classList.remove('trakum_seen')
+  el.classList.add('trakum_new')
+}
+
 class Tracker {
   constructor (page) {
     this._page = page
     this._items = select(page.query)
     this._storage = new TrackerStorage(this)
+    this._configureChrome()
+  }
+
+  _configureChrome () {
+    addListener((message, sender, response) => {
+      const { action } = message
+      switch (action) {
+        case 'MARK_ALL_UNREAD':
+          this._update(this.visited, false, true)
+          response('ok')
+          break
+        default:
+          response('unknown request')
+          break
+      }
+    })
   }
 
   get visited () {
@@ -99,7 +120,7 @@ class Tracker {
     switch (this._page.markStrategy) {
       case 100:
         addCoverageListener(1500, this._items, (visible) => {
-          this._update(visible, true)
+          this._update(visible, true, true)
         })
         break
       case 101:
@@ -110,10 +131,14 @@ class Tracker {
     }
   }
 
-  _update (items = [], save = false) {
+  _update (items = [], visited = true, save = false) {
     items.forEach(item => {
-      item.seen = true
-      markVisited(item.element)
+      item.seen = visited
+      if (visited) {
+        markVisited(item.element)
+      } else {
+        markNew(item.element)
+      }
     })
     updateCount(this.new)
     if (save) this._save()

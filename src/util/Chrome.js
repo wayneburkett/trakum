@@ -27,3 +27,12 @@ export function openUrl (url) {
   if (!chrome.tabs) return
   chrome.tabs.create({ url })
 }
+
+export function addPageContextMenu (title, callback) {
+  if (!chrome.contextMenus) return
+  chrome.contextMenus.create({
+    title: title,
+    contexts: ['page'],
+    onclick: callback
+  })
+}
