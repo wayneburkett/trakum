@@ -28,3 +28,6 @@ fieldset#advanced-options span.title {
   margin: 5px 0;
 }
 
+.page div.alert p {
+  margin-bottom: 0;
+}
