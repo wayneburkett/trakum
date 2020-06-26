@@ -125,6 +125,8 @@ class Tracker {
         break
       case 101:
       default:
+        // TODO: this should be handled by the _update method below, but it'll
+        // need to be refactored before that can happen
         this._items.forEach(item => item.seen = true)
         this._save()
         break
