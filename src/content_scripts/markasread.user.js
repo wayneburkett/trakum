@@ -5,14 +5,37 @@ import { addListener } from '../util/Chrome'
 
 const md5 = require('md5')
 
-function createSelector (element) {
-  return [element.tagName.toLowerCase()]
-    .concat(Array.from(element.classList))
-    .join('.')
+function classList (element) {
+  return Array
+    .from(element.classList)
+    .filter(name => name !== 'trakum_test')
 }
 
-document.addEventListener("mouseover", function(event) {
-  console.log(createSelector(event.target))
+function position (element) {
+  let curr = element.previousElementSibling
+  let count = 1
+  while (curr) {
+    if (curr.tagName === element.tagName) count++
+    curr = curr.previousElementSibling
+  }
+  return `:nth-child(${count})`
+}
+
+function createSelector (element, usePosition = false) {
+  const tagName = element.tagName.toLowerCase()
+  if (element.classList.length !== 0) {
+    return [tagName]
+      .concat(classList(element))
+      .join('.')
+  } else if (usePosition) {
+    return tagName + position(element)
+  } else {
+    return tagName
+  }
+}
+
+document.addEventListener('mouseover', function (event) {
+  queryRunner(createSelector(event.target.parentElement, true) + ' ' + createSelector(event.target))
 })
 
 const queryRunner = (function () {
@@ -20,6 +43,7 @@ const queryRunner = (function () {
   let items = null
 
   return (query) => {
+    console.log(query)
     if (items) items.forEach(item => item.element.classList.remove(testClass))
     items = select(query, testClass)
     return items.length
@@ -48,7 +72,7 @@ function xpath (query) {
   const result = document.evaluate(query, document, null, XPathResult.ORDERED_NODE_SNAPSHOT_TYPE, null)
   return Array(result.snapshotLength)
     .fill(0)
-    .map((node, index) =>  result.snapshotItem(index))
+    .map((node, index) => result.snapshotItem(index))
     .filter(node => node.nodeType === Node.ELEMENT_NODE)
 }
 
