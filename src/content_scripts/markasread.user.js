@@ -5,6 +5,16 @@ import { addListener } from '../util/Chrome'
 
 const md5 = require('md5')
 
+function createSelector (element) {
+  return [element.tagName.toLowerCase()]
+    .concat(Array.from(element.classList))
+    .join('.')
+}
+
+document.addEventListener("mouseover", function(event) {
+  console.log(createSelector(event.target))
+})
+
 const queryRunner = (function () {
   const testClass = 'trakum_test'
   let items = null
@@ -34,21 +44,22 @@ addListener((message, sender, response) => {
   }
 })
 
+function xpath (query) {
+  const result = document.evaluate(query, document, null, XPathResult.ORDERED_NODE_SNAPSHOT_TYPE, null)
+  return Array(result.snapshotLength)
+    .fill(0)
+    .map((node, index) =>  result.snapshotItem(index))
+    .filter(node => node.nodeType === Node.ELEMENT_NODE)
+}
+
+function css (selector) {
+  return Array.from(document.querySelectorAll(selector))
+}
+
 function select (query, className = 'trakum_new') {
-  const result = document.evaluate(query, document, null,
-    XPathResult.ORDERED_NODE_SNAPSHOT_TYPE, null)
-  const items = []
-  for (let i = 0; i < result.snapshotLength; i++) {
-    const node = result.snapshotItem(i)
-    switch (node.nodeType) {
-      case Node.ELEMENT_NODE:
-        items.push(createItem(node, className))
-        break
-      default:
-        break
-    }
-  }
-  return items
+  if (!query) return []
+  const queryer = (query.startsWith('/') ? xpath : css)
+  return queryer(query).map(element => createItem(element, className))
 }
 
 function createItem (element, className) {
