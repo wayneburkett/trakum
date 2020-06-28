@@ -12,13 +12,15 @@ function classList (element) {
 }
 
 function position (element) {
-  let curr = element.previousElementSibling
-  let count = 1
-  while (curr) {
-    if (curr.tagName === element.tagName) count++
-    curr = curr.previousElementSibling
-  }
-  return `:nth-child(${count})`
+  return `:nth-child(${previousSiblings(element).length})`
+}
+
+// returns an array including the original element and all previous siblings with the desired tag name
+function previousSiblings (element, tagName = element.tagName) {
+  return (function next (element) {
+    if (!element) return []
+    return ((element.tagName === tagName) ? [element] : []).concat(next(element.previousElementSibling))
+  })(element)
 }
 
 function createSelector (element, usePosition = false) {
