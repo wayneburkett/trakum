@@ -4,10 +4,8 @@ function classList (element) {
     .filter(name => name !== 'trakum_test')
 }
 
-// TODO: this returns nth-child, but previousSiblings returns what is better used for nth-of-type
-// need to decide which is preferred, because right now this is a bug
 function position (element) {
-  return `:nth-child(${previousSiblings(element).length})`
+  return `:nth-of-type(${previousSiblings(element).length})`
 }
 
 // returns an array including the original element and all previous siblings with the desired tag name
