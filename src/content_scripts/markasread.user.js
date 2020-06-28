@@ -2,39 +2,9 @@ import { MessageRouter } from '../util/MessageRouter'
 import { Storage } from '../util/Storage'
 import { addCoverageListener } from '../util/ScreenCoverage'
 import { addListener } from '../util/Chrome'
+import { createSelector } from '../util/Selectors'
 
 const md5 = require('md5')
-
-function classList (element) {
-  return Array
-    .from(element.classList)
-    .filter(name => name !== 'trakum_test')
-}
-
-function position (element) {
-  return `:nth-child(${previousSiblings(element).length})`
-}
-
-// returns an array including the original element and all previous siblings with the desired tag name
-function previousSiblings (element, tagName = element.tagName) {
-  return (function next (element) {
-    if (!element) return []
-    return ((element.tagName === tagName) ? [element] : []).concat(next(element.previousElementSibling))
-  })(element)
-}
-
-function createSelector (element, usePosition = false) {
-  const tagName = element.tagName.toLowerCase()
-  if (element.classList.length !== 0) {
-    return [tagName]
-      .concat(classList(element))
-      .join('.')
-  } else if (usePosition) {
-    return tagName + position(element)
-  } else {
-    return tagName
-  }
-}
 
 document.addEventListener('mouseover', function (event) {
   queryRunner(createSelector(event.target.parentElement, true) + ' ' + createSelector(event.target))

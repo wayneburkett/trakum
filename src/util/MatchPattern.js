@@ -1,3 +1,6 @@
+/**
+ * MatchPattern
+ */
 export const MatchPattern = (function () {
   function components (pattern) {
     const results = pattern.match(matcher.MATCH_PATTERN_REGEX)
