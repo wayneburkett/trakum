@@ -16,15 +16,7 @@ function previousSiblings (element, tagName = element.tagName) {
   })(element)
 }
 
-/**
- * Creates a CSS selector matching the given element
- *
- * @param element $element
- * @param usePosition = false if true, then fallback to positional selectors for elements with no class names
- * @access public
- * @return string a CSS selector for the given element
- */
-export function createSelector (element, usePosition = false) {
+function selector (element, usePosition = false) {
   const tagName = element.tagName.toLowerCase()
   if (element.classList.length !== 0) {
     return [tagName]
@@ -35,4 +27,17 @@ export function createSelector (element, usePosition = false) {
   } else {
     return tagName
   }
+}
+
+/**
+ * Creates a CSS selector matching the given element
+ *
+ * @param element $element
+ * @access public
+ * @return string a CSS selector for the given element
+ */
+export function createSelector (element) {
+  if (!element) return ''
+  if (!element.parentElement) return selector(element)
+  return selector(element.parentElement, true) + ' ' + selector(element)
 }

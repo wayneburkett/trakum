@@ -7,7 +7,7 @@ import { createSelector } from '../util/Selectors'
 const md5 = require('md5')
 
 document.addEventListener('mouseover', function (event) {
-  queryRunner(createSelector(event.target.parentElement, true) + ' ' + createSelector(event.target))
+  queryRunner(createSelector(event.target))
 })
 
 const queryRunner = (function () {
