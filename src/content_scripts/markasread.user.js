@@ -3,24 +3,13 @@ import { Storage } from '../util/Storage'
 import { addCoverageListener } from '../util/ScreenCoverage'
 import { addListener } from '../util/Chrome'
 import { createSelector } from '../util/Selectors'
+import { select, queryRunner } from '../util/Query'
 
 const md5 = require('md5')
 
 document.addEventListener('mouseover', function (event) {
   queryRunner(createSelector(event.target))
 })
-
-const queryRunner = (function () {
-  const testClass = 'trakum_test'
-  let items = null
-
-  return (query) => {
-    console.log(query)
-    if (items) items.forEach(item => item.element.classList.remove(testClass))
-    items = select(query, testClass)
-    return items.length
-  }
-})()
 
 addListener((message, sender, response) => {
   const { action, payload } = message
@@ -40,26 +29,7 @@ addListener((message, sender, response) => {
   }
 })
 
-function xpath (query) {
-  const result = document.evaluate(query, document, null, XPathResult.ORDERED_NODE_SNAPSHOT_TYPE, null)
-  return Array(result.snapshotLength)
-    .fill(0)
-    .map((node, index) => result.snapshotItem(index))
-    .filter(node => node.nodeType === Node.ELEMENT_NODE)
-}
-
-function css (selector) {
-  return Array.from(document.querySelectorAll(selector))
-}
-
-function select (query, className = 'trakum_new') {
-  if (!query) return []
-  const queryer = (query.startsWith('/') ? xpath : css)
-  return queryer(query).map(element => createItem(element, className))
-}
-
 function createItem (element, className) {
-  element.classList.add(className)
   return {
     id: md5(element.textContent),
     element,
@@ -80,9 +50,16 @@ function markNew (el) {
 class Tracker {
   constructor (page) {
     this._page = page
-    this._items = select(page.query)
     this._storage = new TrackerStorage(this)
+    this._items = this._getItems()
     this._configureChrome()
+  }
+
+  _getItems () {
+    return select(this._page.query, el => {
+      el.classList.add('trakum_new')
+      return createItem(el)
+    })
   }
 
   _configureChrome () {
