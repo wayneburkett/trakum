@@ -13,7 +13,7 @@
     ],
     "persistent": true
   },
-  "options_page": "src/options/index.html",
+  "options_page": "options/index.html",
   "browser_action": {
     "default_popup": "index.html",
     "default_title": "Trakum"
@@ -25,7 +25,7 @@
     {
       "matches": ["<all_urls>"],
       "css": [
-        "css/inject.css"
+        "inject/css/inject.css"
       ],
       "js": [
         "src/markasread.user.js"
