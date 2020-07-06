@@ -5,11 +5,15 @@ import App from './App'
 import { GlobalProvider } from './context/GlobalState'
 import 'bootstrap/dist/css/bootstrap.min.css'
 
+const anchor = document.createElement('div')
+anchor.id = 'extension-root'
+document.body.insertBefore(anchor, document.body.childNodes[0])
+
 ReactDOM.render(
   <React.StrictMode>
     <GlobalProvider>
       <App />
     </GlobalProvider>
   </React.StrictMode>,
-  document.getElementById('root')
+  document.getElementById('extension-root')
 )
