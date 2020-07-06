@@ -39,3 +39,8 @@ addPageContextMenu('Mark all unread', (info = {}, tab = {}) => {
   if (!tab.id) return
   MessageRouter.sendMessageToTab(tab.id, 'MARK_ALL_UNREAD')
 })
+
+addPageContextMenu('Select from page', (info = {}, tab = {}) => {
+  if (!tab.id) return
+  MessageRouter.sendMessageToTab(tab.id, 'SELECT_FROM_PAGE')
+})

@@ -18,7 +18,9 @@ function previousSiblings (element, tagName = element.tagName) {
 
 function selector (element, usePosition = false) {
   const tagName = element.tagName.toLowerCase()
-  if (element.classList.length !== 0) {
+  if (element.id) {
+    return `${tagName}#${element.id}`
+  } else if (element.classList.length !== 0) {
     return [tagName]
       .concat(classList(element))
       .join('.')

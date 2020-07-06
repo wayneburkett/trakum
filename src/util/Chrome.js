@@ -36,3 +36,12 @@ export function addPageContextMenu (title, callback) {
     onclick: callback
   })
 }
+
+export function getUrl (url) {
+  try {
+    return chrome.extension.getURL(url)
+  } catch (e) {
+    console.log(e)
+  }
+  return null
+}
