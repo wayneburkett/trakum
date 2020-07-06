@@ -21,6 +21,9 @@
   "permissions": [
     "<all_urls>", "storage", "contextMenus"
   ],
+  "web_accessible_resources": [
+    "inject/*"
+   ],
   "content_scripts": [
     {
       "matches": ["<all_urls>"],

@@ -2,14 +2,10 @@ import { MessageRouter } from '../util/MessageRouter'
 import { Storage } from '../util/Storage'
 import { addCoverageListener } from '../util/ScreenCoverage'
 import { addListener } from '../util/Chrome'
-import { createSelector } from '../util/Selectors'
 import { select, queryRunner } from '../util/Query'
+import { inject } from './picker'
 
 const md5 = require('md5')
-
-document.addEventListener('mouseover', function (event) {
-  queryRunner(createSelector(event.target))
-})
 
 addListener((message, sender, response) => {
   const { action, payload } = message
@@ -22,6 +18,10 @@ addListener((message, sender, response) => {
         // ignore
       }
       response({ count })
+      break
+    case 'SELECT_FROM_PAGE':
+      inject()
+      response('done')
       break
     default:
       response('unknown request')
