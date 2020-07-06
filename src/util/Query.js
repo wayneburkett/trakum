@@ -18,7 +18,7 @@ export function select (query, callback) {
 }
 
 export const queryRunner = (function () {
-  const testClass = 'trakum_test'
+  const testClass = 'trakum-test'
   let items = null
 
   return (query, callback) => {

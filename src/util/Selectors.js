@@ -1,7 +1,7 @@
 function classList (element) {
   return Array
     .from(element.classList)
-    .filter(name => name !== 'trakum_test')
+    .filter(name => name !== 'trakum-test')
 }
 
 function position (element) {
