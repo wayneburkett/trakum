@@ -1,0 +1,31 @@
+#trakum-app {
+    position: fixed !important;
+    z-index: 65532111111 !important;
+    bottom: 10px !important;
+    right: 10px !important;
+    width: 500px !important;
+    min-width: 500px;
+    border: 1px solid green;
+    padding: 10px;
+    background-color: #fff;
+}
+
+.trakum_new {
+    border: 1px solid red;
+}
+
+.trakum_seen {
+    border: 1px solid blue;
+}
+
+.trakum-test,
+.trakum-test-selected {
+    z-index: 655321 !important;
+    background: rgb(233, 236, 242) !important;
+    outline: rgb(18, 23, 5) solid 1px !important;
+}
+
+.trakum-test-selected {
+    background: rgb(200, 236, 242) !important;
+}
+
