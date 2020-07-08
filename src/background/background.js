@@ -42,5 +42,7 @@ addPageContextMenu('Mark all unread', (info = {}, tab = {}) => {
 
 addPageContextMenu('Select from page', (info = {}, tab = {}) => {
   if (!tab.id) return
+  chrome.tabs.executeScript(tab.id, { file: './static/js/main.js' })
+  chrome.tabs.insertCSS(tab.id, { file: './static/css/main.css' })
   MessageRouter.sendMessageToTab(tab.id, 'SELECT_FROM_PAGE')
 })

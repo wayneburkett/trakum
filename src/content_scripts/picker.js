@@ -1,5 +1,4 @@
 import { createSelector } from '../util/Selectors'
-import { getUrl } from '../util/Chrome'
 
 const $ = require('jquery')
 
@@ -47,12 +46,4 @@ const makeSelector = (function () {
   }
 })()
 
-export function inject () {
-  const url = getUrl('inject/index.html')
-  if (url) {
-    $.get(url, data => $('body').append(data))
-    makeSelector()
-  } else {
-    console.log('Could not inject picker')
-  }
-}
+export const inject = () => makeSelector()

@@ -6,7 +6,7 @@ import { GlobalProvider } from './context/GlobalState'
 import 'bootstrap/dist/css/bootstrap.min.css'
 
 const anchor = document.createElement('div')
-anchor.id = 'extension-root'
+anchor.id = 'trakum-app'
 document.body.insertBefore(anchor, document.body.childNodes[0])
 
 ReactDOM.render(
@@ -15,5 +15,5 @@ ReactDOM.render(
       <App />
     </GlobalProvider>
   </React.StrictMode>,
-  document.getElementById('extension-root')
+  document.getElementById('trakum-app')
 )
