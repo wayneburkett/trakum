@@ -1,4 +1,3 @@
-
 function css (selector) {
   return Array.from(document.querySelectorAll(selector))
 }

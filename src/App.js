@@ -1,8 +1,9 @@
 import React, { useContext, useEffect } from 'react'
 import './css/App.css'
 import { BrowserAction } from './components/BrowserAction'
-import { Navigation } from './components/Navigation'
+import { ContentScript } from './components/ContentScript'
 import { GlobalContext } from './context/GlobalState'
+import { isContentScript } from './util/Chrome'
 
 function App () {
   const { getCurrentTabInfo, getPageSpecs } = useContext(GlobalContext)
@@ -10,10 +11,15 @@ function App () {
   useEffect(() => getCurrentTabInfo(), [])
   useEffect(() => getPageSpecs(), [])
 
+  const render = () => {
+    return isContentScript()
+      ? <ContentScript />
+      : <BrowserAction />
+  }
+
   return (
     <div className='App'>
-      <Navigation />
-      <BrowserAction />
+      {render()}
     </div>
   )
 }

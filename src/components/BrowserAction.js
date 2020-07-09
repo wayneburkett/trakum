@@ -4,6 +4,7 @@ import { CurrentPage } from './CurrentPage'
 import { EditPage } from './EditPage'
 import { NewPage } from './NewPage'
 import { GlobalContext } from '../context/GlobalState'
+import { Navigation } from './Navigation'
 
 export function BrowserAction () {
   const { currentPage } = useContext(GlobalContext)
@@ -24,8 +25,11 @@ export function BrowserAction () {
   }
 
   return (
-    <div className='page'>
-      {render(currentPage)}
-    </div>
+    <>
+      <Navigation />
+      <div className='page'>
+        {render(currentPage)}
+      </div>
+    </>
   )
 }

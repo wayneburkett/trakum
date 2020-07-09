@@ -45,3 +45,24 @@ export function getUrl (url) {
   }
   return null
 }
+
+export function isChromeExtension () {
+  return !!(window.chrome && window.chrome.extension)
+}
+
+export function getContext () {
+  const protocol = window.location.protocol.replace(':', '')
+  if (isChromeExtension()) {
+    if (protocol === 'chrome-extension') {
+      return (window === chrome.extension.getBackgroundPage())
+        ? 'background'
+        : 'extension'
+    }
+    return 'content'
+  }
+  return protocol
+}
+
+export function isContentScript () {
+  return getContext() === 'content'
+}
