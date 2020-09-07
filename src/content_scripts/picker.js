@@ -18,7 +18,6 @@ const makeSelector = (function () {
     clearClass(testClassName)
     currentSelector = createSelector(event.target)
     $(currentSelector).addClass(testClassName)
-    $('#trakum-app p').text(currentSelector)
   }
 
   function onMouseOut (event) {
