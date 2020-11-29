@@ -8,7 +8,7 @@ export const ContentScript = () => {
   return (
     <div>
       {hasMovedCursor
-        ? `${sel}.`
+        ? `${sel}`
         : 'Move your mouse'}
     </div>
   )
