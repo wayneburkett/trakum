@@ -20,7 +20,7 @@ function selector (element, usePosition = false) {
   const tagName = element.tagName.toLowerCase()
   if (element.id) {
     return `${tagName}#${element.id}`
-  } else if (element.classList.length !== 0) {
+  } else if (classList(element) !== 0) {
     return [tagName]
       .concat(classList(element))
       .join('.')
