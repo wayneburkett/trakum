@@ -29,6 +29,10 @@ addListener((message, sender, response) => {
       trakum.deletePageSpec(payload)
       response(trakum.pageSpecs)
       break
+    case 'TEST_QUERY':
+      MessageRouter.sendMessageToTab(sender.tab.id, 'TEST_QUERY', payload, response => {})
+      response({})
+      break
     default:
       response('unknown request')
       break
@@ -42,7 +46,8 @@ addPageContextMenu('Mark all unread', (info = {}, tab = {}) => {
 
 addPageContextMenu('Select from page', (info = {}, tab = {}) => {
   if (!tab.id) return
+  // because we renamed the build output files to something predictable
+  // in build.js, we can load them at will
   chrome.tabs.executeScript(tab.id, { file: './static/js/main.js' })
   chrome.tabs.insertCSS(tab.id, { file: './static/css/main.css' })
-  MessageRouter.sendMessageToTab(tab.id, 'SELECT_FROM_PAGE')
 })

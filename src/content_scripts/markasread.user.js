@@ -3,7 +3,6 @@ import { Storage } from '../util/Storage'
 import { addCoverageListener } from '../util/ScreenCoverage'
 import { addListener } from '../util/Chrome'
 import { select, queryRunner } from '../util/Query'
-import { inject } from './picker'
 
 const md5 = require('md5')
 
@@ -18,10 +17,6 @@ addListener((message, sender, response) => {
         // ignore
       }
       response({ count })
-      break
-    case 'SELECT_FROM_PAGE':
-      inject()
-      response('done')
       break
     default:
       response('unknown request')
