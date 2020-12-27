@@ -9,10 +9,6 @@ export const ContentScript = () => {
   const { sel: selector2 } = useSelectorCreator('click', true)
   const hasMovedCursor = typeof x === 'number' && typeof y === 'number'
 
-  const handleClick = ev => {
-    ev.preventDefault()
-  }
-
   useEffect(() => {
     applyTestQuery(query, response => {})
     return () => applyTestQuery('')
@@ -25,11 +21,11 @@ export const ContentScript = () => {
   }
 
   return (
-    <div id="t-content-script" onClick={handleClick}>
+    <div id="t-content-script">
       {hasMovedCursor
         ? `${selector2} and ${query}`
         : 'Move your mouse'}
-      <Button as="input" type="reset" value="Reset" onClick={handleClick} />
+      <Button as="input" type="reset" value="Reset" />
     </div>
   )
 }

@@ -12,6 +12,11 @@ const anchor = document.createElement('div')
 anchor.id = 'trakum-app'
 document.body.insertBefore(anchor, document.body.childNodes[0])
 
+// prevent these events from bubbling out of the react app
+const mute = eventName => anchor.addEventListener(eventName, e => e.stopPropagation())
+mute('mouseover')
+mute('click')
+
 ReactDOM.render(
   <React.StrictMode>
     <GlobalProvider>
