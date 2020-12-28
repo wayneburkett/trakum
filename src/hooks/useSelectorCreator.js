@@ -7,6 +7,7 @@ const useSelectorCreator = (eventName = 'mouseover', toggle = false) => {
   const updateSelector = ev => {
     const currentSelector = (toggle && selector.sel) ? null : createSelector(ev.target)
     setSelector({ x: ev.clientX, y: ev.clientY, sel: currentSelector })
+    ev.preventDefault()
   }
 
   useEffect(() => {
