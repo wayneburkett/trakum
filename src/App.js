@@ -1,4 +1,4 @@
-import React, { useContext, useEffect } from 'react'
+import React, { useContext, useEffect, useRef } from 'react'
 import './css/App.css'
 import { BrowserAction } from './components/BrowserAction'
 import { ContentScript } from './components/ContentScript'

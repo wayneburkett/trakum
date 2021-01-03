@@ -30,7 +30,9 @@ addListener((message, sender, response) => {
       response(trakum.pageSpecs)
       break
     case 'TEST_QUERY':
-      MessageRouter.sendMessageToTab(sender.tab.id, 'TEST_QUERY', payload, response => {})
+    case 'LOCK_TEST_QUERY':
+    case 'RESET_TEST_QUERY':
+      MessageRouter.sendMessageToTab(sender.tab.id, action, payload, response => {})
       response({})
       break
     default:

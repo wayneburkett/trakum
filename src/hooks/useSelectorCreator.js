@@ -1,11 +1,16 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { createSelector } from '../util/Selectors'
 
-const useSelectorCreator = (eventName = 'mouseover', toggle = false) => {
+const useSelectorCreator = (eventName = 'mouseover', ref) => {
   const [selector, setSelector] = useState({ x: null, y: null, sel: null })
 
+  // I'm probably supposed to do something much more complicated with refs
+  // here, but this seems to work just fine
+  const root = document.getElementById('trakum-app')
+
   const updateSelector = ev => {
-    const currentSelector = (toggle && selector.sel) ? null : createSelector(ev.target)
+    if (root && root.contains(ev.target)) return
+    const currentSelector = createSelector(ev.target)
     setSelector({ x: ev.clientX, y: ev.clientY, sel: currentSelector })
     ev.preventDefault()
   }

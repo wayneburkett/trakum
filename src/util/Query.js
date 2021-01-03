@@ -16,16 +16,15 @@ export function select (query, callback) {
   return (typeof (callback) === 'function') ? results.map(callback) : results
 }
 
-export const queryRunner = (function () {
-  const testClass = 'trakum-test'
+export const makeQueryRunner = function (className) {
   let items = null
 
   return (query, callback) => {
-    if (items) items.forEach(el => el.classList.remove(testClass))
+    if (items) items.forEach(el => el.classList.remove(className))
     items = select(query, el => {
-      el.classList.add(testClass)
+      el.classList.add(className)
       return el
     })
     return items.length
   }
-})()
+}

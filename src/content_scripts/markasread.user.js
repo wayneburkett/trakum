@@ -2,21 +2,44 @@ import { MessageRouter } from '../util/MessageRouter'
 import { Storage } from '../util/Storage'
 import { addCoverageListener } from '../util/ScreenCoverage'
 import { addListener } from '../util/Chrome'
-import { select, queryRunner } from '../util/Query'
+import { select, makeQueryRunner } from '../util/Query'
 
 const md5 = require('md5')
 
+const queryRunner1 = makeQueryRunner('trakum-test')
+const queryRunner2 = makeQueryRunner('trakum-test-selected')
+
 addListener((message, sender, response) => {
   const { action, payload } = message
+  console.log('action=' + action)
   switch (action) {
     case 'TEST_QUERY':
       let count = 0
       try {
-        count = queryRunner(payload)
+        count = queryRunner1(payload.query)
       } catch (e) {
         // ignore
       }
       response({ count })
+      break
+    case 'LOCK_TEST_QUERY':
+      console.log('lock test query')
+      try {
+        queryRunner2(payload.query)
+      } catch (e) {
+        // ignore
+      }
+      response({})
+      break
+    case 'RESET_TEST_QUERY':
+      console.log('reset')
+      try {
+        queryRunner1()
+        queryRunner2()
+      } catch (e) {
+        // ignore
+      }
+      response({})
       break
     default:
       response('unknown request')
