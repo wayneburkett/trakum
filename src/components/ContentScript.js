@@ -10,6 +10,8 @@ export const ContentScript = (root) => {
   const { sel: lockedQuery } = useSelectorCreator('click', ref)
   const hasMovedCursor = typeof x === 'number' && typeof y === 'number'
 
+  const [displayQuery, setDisplayQuery] = useState('')
+
   useEffect(() => {
     console.log('query changed to...', query)
     applyTestQuery('TEST_QUERY', query, response => {})
@@ -31,17 +33,19 @@ export const ContentScript = (root) => {
     MessageRouter.sendMessage(msg, payload, response => {
       if (callback && response) callback(response)
     })
+    setDisplayQuery(lockedQuery || query)
   }
 
   const reset = (e) => {
     MessageRouter.sendMessage('RESET_TEST_QUERY', {}, response => {})
+    setDisplayQuery('')
     e.stopPropagation()
   }
 
   return (
     <div id="t-content-script" ref={ref}>
       {hasMovedCursor
-        ? `${lockedQuery || query}`
+        ? `${displayQuery}`
         : 'Move your mouse'}
       <Button variant="primary" onClick={reset}>Reset</Button>
     </div>
