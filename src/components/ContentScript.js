@@ -13,16 +13,14 @@ export const ContentScript = (root) => {
   const [displayQuery, setDisplayQuery] = useState('')
 
   useEffect(() => {
-    console.log('query changed to...', query)
     applyTestQuery('TEST_QUERY', query, response => {})
     return () => applyTestQuery('')
   }, [query])
 
   useEffect(() => {
-    console.log('lockedQuery changed to...', lockedQuery)
     applyTestQuery('LOCK_TEST_QUERY', lockedQuery, response => {})
     return () => applyTestQuery('')
-  }, [lockedQuery])
+  }, [query, lockedQuery])
 
   const applyTestQuery = (msg, query, callback) => {
     // we could do some of this work here, but the problem is that we
