@@ -9,6 +9,7 @@ const useSelectorCreator = (eventName = 'mouseover', ref) => {
   const root = document.getElementById('trakum-app')
 
   const updateSelector = ev => {
+    // ignore events that occur within the React component
     if (root && root.contains(ev.target)) return
     const currentSelector = createSelector(ev.target)
     setSelector({ x: ev.clientX, y: ev.clientY, sel: currentSelector })
