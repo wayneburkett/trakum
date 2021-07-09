@@ -44,7 +44,7 @@ export const ContentScript = (root) => {
 
   return (
     <div id="t-content-script" ref={ref}>
-      {hasMovedCursor
+      {hasMovedCursor && displayQuery
         ? `${displayQuery}`
         : `${defaultDisplayMessage}`}
       <Button variant="primary" onClick={reset}>Reset</Button>
