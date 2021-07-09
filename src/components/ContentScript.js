@@ -5,9 +5,10 @@ import { MessageRouter } from '../util/MessageRouter'
 import { GlobalContext } from '../context/GlobalState'
 
 export const ContentScript = (root) => {
+  const defaultDisplayMessage = 'Move your mouse'
   const ref = useRef()
   const { x, y, sel: query } = useSelectorCreator('mouseover', ref)
-  const { sel: lockedQuery } = useSelectorCreator('click', ref)
+  const lockedQueryObj = useSelectorCreator('click', ref)
   const hasMovedCursor = typeof x === 'number' && typeof y === 'number'
 
   const [displayQuery, setDisplayQuery] = useState('')
@@ -18,9 +19,11 @@ export const ContentScript = (root) => {
   }, [query])
 
   useEffect(() => {
-    applyTestQuery('LOCK_TEST_QUERY', lockedQuery, response => {})
+    const query = lockedQueryObj ? lockedQueryObj.sel : null
+    applyTestQuery('LOCK_TEST_QUERY', query, response => {})
+    setDisplayQuery(query)
     return () => applyTestQuery('')
-  }, [query, lockedQuery])
+  }, [lockedQueryObj])
 
   const applyTestQuery = (msg, query, callback) => {
     // we could do some of this work here, but the problem is that we
@@ -31,12 +34,11 @@ export const ContentScript = (root) => {
     MessageRouter.sendMessage(msg, payload, response => {
       if (callback && response) callback(response)
     })
-    setDisplayQuery(lockedQuery || query)
   }
 
   const reset = (e) => {
     MessageRouter.sendMessage('RESET_TEST_QUERY', {}, response => {})
-    setDisplayQuery('')
+    setDisplayQuery(defaultDisplayMessage)
     e.stopPropagation()
   }
 
@@ -44,7 +46,7 @@ export const ContentScript = (root) => {
     <div id="t-content-script" ref={ref}>
       {hasMovedCursor
         ? `${displayQuery}`
-        : 'Move your mouse'}
+        : `${defaultDisplayMessage}`}
       <Button variant="primary" onClick={reset}>Reset</Button>
     </div>
   )

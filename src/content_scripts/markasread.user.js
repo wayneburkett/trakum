@@ -11,7 +11,7 @@ const queryRunner2 = makeQueryRunner('trakum-test-selected')
 
 addListener((message, sender, response) => {
   const { action, payload } = message
-  console.log('action=' + action)
+  console.log('action=' + action, payload)
   switch (action) {
     case 'TEST_QUERY':
       let count = 0
@@ -23,7 +23,6 @@ addListener((message, sender, response) => {
       response({ count })
       break
     case 'LOCK_TEST_QUERY':
-      console.log('lock test query')
       try {
         queryRunner2(payload.query)
       } catch (e) {
@@ -32,7 +31,6 @@ addListener((message, sender, response) => {
       response({})
       break
     case 'RESET_TEST_QUERY':
-      console.log('reset')
       try {
         queryRunner1()
         queryRunner2()
