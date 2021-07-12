@@ -12,16 +12,25 @@ export const ContentScript = (root) => {
   const hasMovedCursor = typeof x === 'number' && typeof y === 'number'
 
   const [displayQuery, setDisplayQuery] = useState('')
+  const [lockedQuery, setLockedQuery] = useState('')
 
   useEffect(() => {
-    applyTestQuery('TEST_QUERY', query, response => {})
+    if (!lockedQuery) {
+      applyTestQuery('TEST_QUERY', query, response => {})
+      setDisplayQuery(query)
+    }
     return () => applyTestQuery('')
   }, [query])
 
   useEffect(() => {
-    const query = lockedQueryObj ? lockedQueryObj.sel : null
-    applyTestQuery('LOCK_TEST_QUERY', query, response => {})
-    setDisplayQuery(query)
+    if (lockedQuery) {
+      reset()
+    } else {
+      const query = lockedQueryObj ? lockedQueryObj.sel : null
+      applyTestQuery('LOCK_TEST_QUERY', query, response => {})
+      setDisplayQuery(query)
+      setLockedQuery(query)
+    }
     return () => applyTestQuery('')
   }, [lockedQueryObj])
 
@@ -39,7 +48,10 @@ export const ContentScript = (root) => {
   const reset = (e) => {
     MessageRouter.sendMessage('RESET_TEST_QUERY', {}, response => {})
     setDisplayQuery(defaultDisplayMessage)
-    e.stopPropagation()
+    setLockedQuery('')
+    if (e) {
+      e.stopPropagation()
+    }
   }
 
   return (
