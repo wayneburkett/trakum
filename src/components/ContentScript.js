@@ -56,10 +56,16 @@ export const ContentScript = (root) => {
 
   return (
     <div id="t-content-script" ref={ref}>
-      {hasMovedCursor && displayQuery
+      <div>
+        <span>{hasMovedCursor && displayQuery
         ? `${displayQuery}`
-        : `${defaultDisplayMessage}`}
-      <Button variant="primary" onClick={reset}>Reset</Button>
+        : `${defaultDisplayMessage}`}</span>
+      </div>
+      {lockedQuery &&
+        (<div>
+          <Button variant="danger" onClick={reset}>Reset</Button>
+          <Button variant="secondary" onClick={reset}>Next</Button>
+        </div>)}
     </div>
   )
 }
