@@ -11,6 +11,7 @@ export function BrowserAction () {
 
   const render = ({ key, data = {} }) => {
     switch (key) {
+      case 'start':
       case 'current':
         return <CurrentPage />
       case 'all':

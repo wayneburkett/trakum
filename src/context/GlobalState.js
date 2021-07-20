@@ -5,7 +5,7 @@ import AppReducer from './AppReducer'
 
 const initialState = {
   pageSpecs: [],
-  currentPage: { key: 'current', data: null },
+  currentPage: { key: 'start', data: null },
   currentUrl: null,
   tabId: null
 }

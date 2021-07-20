@@ -11,6 +11,7 @@ export const ContentScript = (root) => {
   const lockedQueryObj = useSelectorCreator('click', ref)
   const hasMovedCursor = typeof x === 'number' && typeof y === 'number'
 
+  const { currentPage, selectKey } = useContext(GlobalContext)
   const [displayQuery, setDisplayQuery] = useState('')
   const [lockedQuery, setLockedQuery] = useState('')
 
@@ -49,8 +50,21 @@ export const ContentScript = (root) => {
     MessageRouter.sendMessage('RESET_TEST_QUERY', {}, response => {})
     setDisplayQuery(defaultDisplayMessage)
     setLockedQuery('')
+    selectKey('start')
     if (e) {
       e.stopPropagation()
+    }
+  }
+
+  const render = ({ key = 'start', data = {} }) => {
+    console.log(key, data)
+    switch (key) {
+      case 'start':
+        return <span>first</span>
+      case 'next':
+        return <span>next</span>
+      default:
+        return <></>
     }
   }
 
@@ -64,8 +78,9 @@ export const ContentScript = (root) => {
       {lockedQuery &&
         (<div>
           <Button variant="danger" onClick={reset}>Reset</Button>
-          <Button variant="secondary" onClick={reset}>Next</Button>
+          <Button variant="secondary" onClick={e => selectKey('next')}>Next</Button>
         </div>)}
+        <span>{render(currentPage)}</span>
     </div>
   )
 }
