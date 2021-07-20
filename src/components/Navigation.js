@@ -10,7 +10,7 @@ export function Navigation () {
   return (
     <Navbar bg='dark' variant='dark'>
       <Navbar.Brand eventKey='home'>Trakum</Navbar.Brand>
-      <Nav className='mr-auto' activeKey={key} onSelect={e => selectKey(e)}>
+      <Nav className='mr-auto' activeKey={key} onSelect={key => selectKey(key)}>
         <Nav.Link eventKey='current'>Current</Nav.Link>
         <Nav.Link eventKey='all'>All</Nav.Link>
         <Nav.Link eventKey='new'>New</Nav.Link>
